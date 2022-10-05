@@ -1172,12 +1172,8 @@ YY_RULE_SETUP
     show_info("COMMENT");
     char cur = input();
     char nxt = input();
-    while(cur != '*'  && nxt != '/')
+    while(cur != '*' || nxt != '/')
     {
-        if(cur == '/' && nxt == '*'){
-            printf("Error type B at Line %d: syntax error, \"/*\" \"*/\" not allowed to be nested\n", yylineno);
-            break;
-        }
         cur = nxt;
         nxt = input();
         if(nxt == '\0'){
@@ -1189,7 +1185,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 235 "./lexical.l"
+#line 231 "./lexical.l"
 {
     show_info("COMMENT");
     char c = input();
@@ -1198,7 +1194,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 241 "./lexical.l"
+#line 237 "./lexical.l"
 {
     Lerror++;
     printf("Error type A at line %d: Mysterious character \"%s\".\n",yylineno,yytext);
@@ -1206,10 +1202,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 246 "./lexical.l"
+#line 242 "./lexical.l"
 ECHO;
 	YY_BREAK
-#line 1213 "./lex.yy.c"
+#line 1209 "./lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2226,7 +2222,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 246 "./lexical.l"
+#line 242 "./lexical.l"
 
 
 void show_info(char *str){

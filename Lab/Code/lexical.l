@@ -218,12 +218,8 @@ SPACE [  \r\n\t]+
     show_info("COMMENT");
     char cur = input();
     char nxt = input();
-    while(cur != '*'  && nxt != '/')
+    while(cur != '*' || nxt != '/')
     {
-        if(cur == '/' && nxt == '*'){
-            printf("Error type B at Line %d: syntax error, \"/*\" \"*/\" not allowed to be nested\n", yylineno);
-            break;
-        }
         cur = nxt;
         nxt = input();
         if(nxt == '\0'){
