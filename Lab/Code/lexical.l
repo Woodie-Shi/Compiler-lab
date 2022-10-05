@@ -199,7 +199,7 @@ SPACE [  \r\n\t]+
     //return IF;
 }
 {ELSE}  {
-    show_info("ELSE",yytext);
+    show_info("ELSE");
     //return ELSE;
 }
 {WHILE}     {
