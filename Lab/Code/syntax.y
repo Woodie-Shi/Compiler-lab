@@ -3,13 +3,15 @@
     #include <stdlib.h>
     #include "lex.yy.c"
     extern int yylineno;
-    int yyerror(char const *msg);
+    int yyerror(char *msg);
 %}
+
+%locations
 
 %union  {
   int type_int;
   float type_float;
-  char[32] type_str;
+  char type_str[32];
 }
 
 //terminal token
@@ -145,6 +147,6 @@ Args : Exp COMMA Args
 
 %%
 
-int yyerror(char msg){
+int yyerror(char *msg){
   fprintf(stderr, "error: %s\n", msg);
 }
