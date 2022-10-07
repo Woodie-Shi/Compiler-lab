@@ -16,7 +16,7 @@ extern void yyrestart(FILE *);
     }
     yylineno = 1;
     yyrestart(f);
-    //yyparse();
+    yyparse();
     return 0;
 }*/
 

@@ -1,9 +1,17 @@
 %{
-    #define SHOW_INFO
+    //#define SHOW_INFO
     #include <stdio.h>
     #include <stdlib.h>
     #include<stdint.h>
+    #include "syntax.tab.h"
     int Lerror=0;
+    int yycolumn = 1;
+    #define YY_USER_ACTION \
+    yylloc.first_line = yylloc.last_line = yylineno; \
+    yylloc.first_column = yycolumn; \
+    yylloc.last_column = yycolumn + yyleng - 1; \
+    yycolumn += yyleng;
+
     void show_info(char *str);
 %}
 %option yylineno
@@ -46,55 +54,55 @@ RETURN return
 IF if
 ELSE else
 WHILE while
-SPACE [  \r\n\t]+
+SPACE [  \r\t]+
 
 %%
 {BIN}   {
     show_info("BIN");
     uint32_t val = strtol(yytext, NULL, 2);
     printf("val: %u\n", val);
-    //return INT;
+    return INT;
 }
 {WRONG_BIN}   {
     printf("Error type A at Line %d: Illegal binary number \'%s\'.\n",yylineno, yytext);
     Lerror += 1;
-    //return INT;
+    return INT;
 }
 {OCT}   {
     show_info("OCT");
     uint32_t val = 0;
     sscanf(yytext,"%o", &val);
     printf("val: %u\n", val);
-    //return INT;
+    return INT;
 }
 {WRONG_OCT} {
     printf("Error type A at Line %d: Illegal octal number \'%s\'.\n",yylineno, yytext);
     Lerror += 1;
-    //return INT;
+    return INT;
 }
 {DEC}   {   
     show_info("DEC");
     uint32_t val = 0;
     sscanf(yytext,"%u", &val);
     printf("val: %u\n", val);
-    //return INT;
+    return INT;
 }
 {WRONG_DEC} {
     printf("Error type A at Line %d: Illegal decimal number \'%s\'.\n",yylineno, yytext);
     Lerror += 1;
-    //return INT;
+    return INT;
 }
 {HEX}   {
     show_info("HEX");
     uint32_t val = 0;
     sscanf(yytext,"%x", &val);
     printf("val: %u\n", val);
-    //return INT;
+    return INT;
 }
 {WRONG_HEX} {
     printf("Error type A at Line %d: Illegal hexadecimal number '%s'\n", yylineno, yytext);
     Lerror += 1;
-    //return INT;
+    return INT;
 }
 
 {FLOAT}     {
@@ -102,113 +110,116 @@ SPACE [  \r\n\t]+
     float val = 0;
     sscanf(yytext,"%f", &val);
     printf("val: %f\n", val);
-    //return FLOAT;
+    return FLOAT;
 }
 {WRONG_FLOAT}   {
     printf("Error type A at Line %d: Illegal floating point number \'%s\'.\n",yylineno, yytext);
     Lerror += 1;
-    //return FLOAT;
+    return FLOAT;
 }
 
 {SEMI}  {
     show_info("SEMI");
-    //return SEMI;
+    return SEMI;
 }
 {COMMA} {
     show_info("COMMA");
-    //return COMMA;
+    return COMMA;
 }
 {ASSIGNOP} {
    show_info("ASSIGNOP");
-    //return ASSIGNOP;
+    return ASSIGNOP;
 }
 {RELOP} {
     show_info("RELOP");
-    //return RELOP;
+    return RELOP;
 }
 {PLUS}  {
     show_info("PLUS");
-    //return PLUS;
+    return PLUS;
 }
 {MINUS} {
     show_info("MINUS");
-    //return MINUS;
+    return MINUS;
 }
 {STAR}  {
     show_info("STAR");
-    //return STAR;
+    return STAR;
 }
 {DIV}   {
     show_info("DIV");
-    //return DIV;
+    return DIV;
 }
 {AND}   {
     show_info("AND");
-    //return AND;
+    return AND;
 }
 {OR}    {
     show_info("OR");
-    //return OR;
+    return OR;
 }
 {DOT}   {
     show_info("DOT");
-    //return DOT;
+    return DOT;
 }
 {NOT}   {
     show_info("NOT");
-    //return NOT;
+    return NOT;
 }
 {TYPE}  {
     show_info("TYPE");
-    //return TYPE;
+    return TYPE;
 }
 {LP}    {
     show_info("LP");
-    //return LP;
+    return LP;
 }
 {RP}        {
     show_info("RP");
-    //return RP;
+    return RP;
 }
 {LB}    {
     show_info("LB");
-    //return LB;
+    return LB;
 }
 {RB}    {
     show_info("RB");
-    //return RB;
+    return RB;
 }
 {LC}    {
     show_info("LC");
-    //return LC;
+    return LC;
 }
 {RC}    {
     show_info("RC");
-    //return RC;
+    return RC;
 }
 {STRUCT}    {
     show_info("STRUCT");
-    //return STRUCT;
+    return STRUCT;
 }
 {RETURN}    {
     show_info("RETURN");
-    //return RETURN;
+    return RETURN;
 }
 {IF}    {
     show_info("IF");
-    //return IF;
+    return IF;
 }
 {ELSE}  {
     show_info("ELSE");
-    //return ELSE;
+    return ELSE;
 }
 {WHILE}     {
     show_info("WHILE");
-    //return WHILE;
+    return WHILE;
 }
 {ID}    {
     show_info("ID");
-    //return ID;
+    return ID;
+}
+"\n"    {
+    yycolumn = 1;
 }
 {SPACE} {
     show_info("SPACE");
