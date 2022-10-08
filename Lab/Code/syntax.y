@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "lex.yy.c"
+    int Error = 0;
     extern int yylineno;
     int yyerror(char *msg);
 %}
