@@ -58,8 +58,8 @@ extern int yydebug;
     DIV = 268,
     AND = 269,
     OR = 270,
-    DOT = 271,
-    NOT = 272,
+    NOT = 271,
+    DOT = 272,
     TYPE = 273,
     LP = 274,
     RP = 275,
@@ -81,9 +81,9 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 14 "./syntax.y" /* yacc.c:1909  */
+#line 15 "./syntax.y" /* yacc.c:1909  */
 
-    struct TreeNode* treeNode;
+    TreeNode* treeNode;
 
 #line 89 "./syntax.tab.h" /* yacc.c:1909  */
 };

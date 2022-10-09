@@ -1,6 +1,6 @@
 #include "syntaxTree.h"
 
-struct TreeNode* node_init(char* _name, enum syntax_type _type){
+TreeNode* node_init(char* _name, enum syntax_type _type){
     struct TreeNode* newnode = (struct TreeNode* )malloc(sizeof(struct TreeNode));
     newnode->children_num = 0;
     newnode->children = NULL;
@@ -9,15 +9,15 @@ struct TreeNode* node_init(char* _name, enum syntax_type _type){
     newnode->lineno = yylineno;
     return newnode;
 }
-void node_insert(int num, struct TreeNode* parent, struct TreeNode* _children[]) {
+void node_insert(int num, TreeNode* parent, TreeNode* _children[]) {
     parent->children_num = num;
-    parent->children = (struct TreeNode**)malloc(num * sizeof(struct TreeNode*));
+    parent->children = (TreeNode**)malloc(num * sizeof(TreeNode*));
     for (int i = 0; i < num; i++) {
         parent->children[i] = _children[i];
         if (_children[i]->lineno < parent->lineno) parent->lineno = _children[i]->lineno;
     }
 }
-void tree_display(struct TreeNode* root, int depth) {
+void tree_display(TreeNode* root, int depth) {
     if (root->type == syntactic && !root->children_num) return;
     for (int i = 0; i < depth; i++) printf("  ");
     printf("%s", root->name);

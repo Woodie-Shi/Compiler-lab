@@ -9,7 +9,7 @@ extern int yyleng;
 extern int yylineno;
 
 enum syntax_type {lexical, syntactic};
-struct TreeNode{
+typedef struct TreeNode{
     char* name;
     union{
         int val_int;
@@ -20,10 +20,10 @@ struct TreeNode{
     struct TreeNode** children;
     int lineno;
     enum syntax_type type;
-};
+}TreeNode;
 
-struct TreeNode* node_init(char* _name, enum syntax_type _type);
-void node_insert(int num, struct TreeNode*parent, struct TreeNode*_children[]);
-void tree_display(struct TreeNode* root, int depth);
-struct TreeNode* treeRoot;
+TreeNode* node_init(char* _name, enum syntax_type _type);
+void node_insert(int num, TreeNode*parent,  TreeNode*_children[]);
+void tree_display(TreeNode* root, int depth);
+TreeNode* treeRoot;
 #endif
