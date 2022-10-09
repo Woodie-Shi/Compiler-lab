@@ -1,10 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include "syntaxTree.h"
 
 extern int yylineno;
 extern FILE* yyin;
 extern void yyrestart(FILE *);
 extern int yyparse();
+extern int Error;
 
 int main(int argc, char** argv)
 {
@@ -17,6 +19,7 @@ int main(int argc, char** argv)
     yylineno = 1;
     yyrestart(f);
     yyparse();
+    if(!Error) tree_display(treeRoot, 0);
     return 0;
 }
 /*int main(int argc, char** argv) {

@@ -1,4 +1,7 @@
+#ifndef _SYNTAXTREE_H
+#define _SYNTAXTREE_H
 #include<stdio.h>
+#include<stdlib.h>
 #include<string.h>
 
 extern char *yytext;
@@ -20,5 +23,7 @@ struct TreeNode{
 };
 
 struct TreeNode* node_init(char* _name, enum syntax_type _type);
-void node_insert(int num, struct TreeNode*parent, struct TreeNode*_children);
+void node_insert(int num, struct TreeNode*parent, struct TreeNode*_children[]);
 void tree_display(struct TreeNode* root, int depth);
+struct TreeNode* treeRoot;
+#endif

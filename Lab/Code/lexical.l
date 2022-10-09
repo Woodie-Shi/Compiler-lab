@@ -5,7 +5,7 @@
     #include<stdint.h>
     #include "syntax.tab.h"
     #include "syntaxTree.h"
-    extern int Error=0;
+    extern int Error;
     int yycolumn = 1;
     #define YY_USER_ACTION \
     yylloc.first_line = yylloc.last_line = yylineno; \

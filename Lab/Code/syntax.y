@@ -55,7 +55,7 @@
 %%
 //High-level Definitions
 Program : ExtDefList{
-struct treeRoot* = node_init("Program", syntactic);
+treeRoot = node_init("Program", syntactic);
 struct TreeNode* children[] = {$1};
 node_insert(1, treeRoot, children);
 }
@@ -148,7 +148,7 @@ VarDec : ID{
     | VarDec LB INT RB{
         $$ = node_init("VarDec", syntactic);
 		struct TreeNode *children[] = {$1, $2, $3, $4};
-		node_insert(4, $$, children, );
+		node_insert(4, $$, children);
     }
     | VarDec LB error RB { /*Missing "]".*/
         Error++;
@@ -206,7 +206,7 @@ StmtList : Stmt StmtList{
     }
     ;
 Stmt : Exp SEMI{
-    $$ = node_insert("Stmt", syntactic);
+    $$ = node_init("Stmt", syntactic);
 	struct TreeNode* children[] = {$1, $2};
 	node_insert(2, $$, children);
 }
@@ -216,7 +216,7 @@ Stmt : Exp SEMI{
 		node_insert(1, $$, children);
     }
     | RETURN Exp SEMI{
-        $$ = node_init("Stmt", syntactic)
+        $$ = node_init("Stmt", syntactic);
 		struct TreeNode* children[] = {$1, $2, $3};
 		node_insert(3, $$, children);
     }
@@ -319,20 +319,20 @@ Exp : Exp ASSIGNOP Exp{
 	    struct TreeNode* children[] = {$1, $2, $3};
 	    node_insert(3, $$, children);
     }
-    | LP Exp RPP{
+    | LP Exp RP{
         $$ = node_init("Exp", syntactic);
 	    struct TreeNode* children[] = {$1, $2, $3};
 	    node_insert(3, $$, children);
     }
     | MINUS Exp{
         $$ = node_init("Exp", syntactic);
-	    struct TreeNode* children[] = {$1, $2, $3};
-	    node_insert(3, $$, children);
+	    struct TreeNode* children[] = {$1, $2};
+	    node_insert(2, $$, children);
     }
     | NOT Exp{
         $$ = node_init("Exp", syntactic);
-	    struct TreeNode* children[] = {$1, $2, $3};
-	    node_insert(3, $$, children);
+	    struct TreeNode* children[] = {$1, $2};
+	    node_insert(2, $$, children);
     }
     | ID LP Args RP{
         $$ = node_init("Exp", syntactic);
@@ -349,11 +349,7 @@ Exp : Exp ASSIGNOP Exp{
 	    struct TreeNode* children[] = {$1, $2, $3, $4};
 	    node_insert(4, $$, children);
     }
-    | Exp LB error RB{
-        $$ = node_init("Exp", syntactic);
-	    struct TreeNode* children[] = {$1, $2, $3, $4};
-	    node_insert(4, $$, children);
-    }
+    //| Exp LB error RB
     | Exp DOT ID{
         $$ = node_init("Exp", syntactic);
 	    struct TreeNode* children[] = {$1, $2, $3};

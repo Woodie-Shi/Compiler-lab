@@ -27,6 +27,6 @@ void tree_display(struct TreeNode* root, int depth) {
     else if (!strcmp(root->name, "ID") || !strcmp(root->name, "TYPE")) printf(": %s\n", root->val_str);
     else printf("\n");
     for (int i = 0; i < root->children_num; i++) {
-        display(root->children[i], depth + 1);
+        tree_display(root->children[i], depth + 1);
     }
 }
