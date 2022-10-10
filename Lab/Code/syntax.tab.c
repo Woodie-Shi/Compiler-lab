@@ -1881,7 +1881,7 @@ node_insert(1, treeRoot, children);
 #line 253 "./syntax.y" /* yacc.c:1646  */
     {
         Error++;
-        yyerror("Error statements.");
+        print_error("Error statements.");
         }
 #line 1887 "./syntax.tab.c" /* yacc.c:1646  */
     break;
@@ -2574,8 +2574,8 @@ yyreturn:
 
 
 void yyerror(char *msg){
-  //fprintf(stderr, "Error type B at Line %d: %s\n", yylineno, msg);
+  //printf("Error type B at Line %d: %s\n", yylineno, msg);
 }
 void print_error(char* msg){
-    fprintf(stderr, "Error type B at Line %d: %s\n", yylineno, msg);
+    printf("Error type B at Line %d: %s\n", yylineno, msg);
 }

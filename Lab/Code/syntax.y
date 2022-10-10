@@ -252,7 +252,7 @@ Stmt : Exp SEMI{
     }
     | error SEMI{
         Error++;
-        yyerror("Error statements.");
+        print_error("Error statements.");
         }
     | RETURN Exp error{
         Error++;
@@ -483,8 +483,8 @@ Args : Exp COMMA Args{
 %%
 
 void yyerror(char *msg){
-  //fprintf(stderr, "Error type B at Line %d: %s\n", yylineno, msg);
+  //printf("Error type B at Line %d: %s\n", yylineno, msg);
 }
 void print_error(char* msg){
-    fprintf(stderr, "Error type B at Line %d: %s\n", yylineno, msg);
+    printf("Error type B at Line %d: %s\n", yylineno, msg);
 }
