@@ -186,7 +186,7 @@ VarList : ParamDec COMMA VarList{
     }
     ;          
 ParamDec : Specifier VarDec{
-    $$ = node_init("ProgramDec", syntactic);
+    $$ = node_init("ParamDec", syntactic);
 	TreeNode *children[] = {$1, $2};
 	node_insert(2, $$, children);
 }
