@@ -458,18 +458,142 @@ FieldList VarDec(TreeNode* root, Type type){
 	return f;
 }
 
+/*DefList → Def DefList
+|  epsilon*/
 FieldList DefList(TreeNode* root){
-
+    FieldList deflist = NULL;
+	while(root && root->children_num == 2){
+		TreeNode* Def = root->children[0];
+        /*Def → Specifier DecList SEMI*/
+        TreeNode* DecList = Def->children[1];
+		Type type = Specifier(Def->children[0]);
+		while(1){
+            /*DecList → Dec | Dec COMMA DecList*/
+			TreeNode* Dec = DecList->children[0];
+            /*Dec → VarDec*/		
+			TreeNode* Vardec = Dec->children[0];
+			FieldList f = VarDec(Vardec, type);
+            if(!isstructue){
+                if(Dec->children_num == 3){
+                    Type x = f->type;
+					Type y = Exp(Dec->children[2]);
+					if(x && y && !check_equivalent(x, y)) printf("Error type 5 at Line %d: Type mismatched for assignment.\n", Vardec->lineno);
+                }
+                if(query(f->name)){
+					printf("Error type 3 at Line %d: Redefined variable \"%s\".\n", Vardec->lineno, f->name);
+                }
+				else fill_in(f);
+            }
+            merge_field(&deflist, f);
+			if(DecList->children_num == 1) break;
+			DecList = DecList->children[2];
+        }
+        root = root->children[1];
+    }
+    return deflist;
 }
 
+/*Specifier → TYPE
+    | StructSpecifier
+
+    StructSpecifier → STRUCT OptTag LC DefList RC
+    | STRUCT Tag    
+
+    OptTag → ID
+    | epsilon
+
+    Tag → ID*/
 Type Specifier(TreeNode* root){
-
+    Type type = (Type )malloc(sizeof(struct Type_));
+    /*Specifier → TYPE  | StructSpecifier*/
+	if(strcmp(root->children[0]->name, "TYPE") == 0){
+		type->kind = BASIC;
+        type->u.basic = 1;
+        if(strcmp(root->children[0]->val_str, "float") == 0) type->u.basic = 2;
+	}
+	else{ 
+		type->kind = STRUCTURE;
+		TreeNode* StructSpecifier = root->children[0];
+        /*StructSpecifier → STRUCT OptTag LC DefList RC | STRUCT Tag*/
+        if(StructSpecifier->children_num == 2){
+            /*Tag → ID*/
+            char *id = StructSpecifier->children[1]->children[0]->val_str;
+			FieldList f = query(id);
+			if(f) type = f->type;
+            else{
+				printf("Error type 17 at Line %d: Undefined structure \"%s\".\n", StructSpecifier->lineno, id);
+				return NULL;
+			}
+        }
+		else{
+			struct Node* deflist = StructSpecifier->children[3];
+			isstructue++;
+			FieldList f = DefList(deflist);
+			fill_in_list(f);
+			isstructue--;
+            type->u.structure.structfield = f;
+            /*OptTag → ID
+                | epsilon */
+			if(StructSpecifier->children[1]->children_num){
+				FieldList s = (FieldList)malloc(sizeof(struct FieldList_));
+				s->name = StructSpecifier->children[1]->children[0]->val_str;
+                s->lineno = StructSpecifier->lineno;
+                type->u.structure.id = s->name;
+				s->type = type;
+				if(query(s->name)){
+					printf("Error type 16 at line %d: Duplicated name \"%s\".\n", StructSpecifier->lineno, s->name);
+                }
+                else insert(s);
+			}
+		}
+	}
+	return type;
 }
 
+/*ExtDefList → ExtDef ExtDefList
+    | epsilon
+
+    ExtDef → Specifier ExtDecList SEMI
+    | Specifier SEMI
+    | Specifier FunDec CompSt
+
+    ExtDecList → VarDec
+    | VarDec COMMA ExtDecList*/
 void ExtDefList(TreeNode* root){
-
+	while(root->children_num == 2){
+		TreeNode *ExtDef = root->children[0];
+		Type type = Specifier(ExtDef->children[0]);
+        /*ExtDef → Specifier FunDec CompSt*/
+		if(strcmp(ExtDef->children[1]->name, "FunDec") == 0)
+		{
+			bool flag = (strcmp(ExtDef->children[2]->name, "CompSt") == 0);
+			struct Type* ftype = FunDec(ExtDef->children[1], type, flag);
+			if(flag) CompSt(ExtDef->children[2], ftype);
+		}
+        // ExtDef → Specifier ExtDecList SEMI
+		else if(strcmp(ExtDef->children[1]->name, "ExtDecList") == 0){
+			TreeNode* ExtDecList = ExtDef->children[1];
+			while(1){
+				TreeNode* Vardec = ExtDecList->children[0];
+				FieldList f = VarDec(Vardec, type);
+				if(query(f->name)){
+					printf("Error type 3 at Line %d: Redefined variable \"%s\".\n",Vardec->lineno, f->name);
+                }
+				else fill_in(f);
+				if(ExtDecList->children_num == 1) break;
+				ExtDecList = ExtDecList->children[2];
+			}
+		}
+		root = root->children[1];
+	}	
 }
 
+/*Program → ExtDefList*/
 void Program(TreeNode* root){
-
+    ExtDefList(root->children[0]);
+	for(int i = 0; i < func_num; i++)
+	{
+		FieldList f = query(func_table[i]);	
+		if(!f->type->u.function.status) printf("Error type 18 at Line %d: Undefined function \"%s\".\n",f->lineno,  func_table[i]);
+	}
 }
