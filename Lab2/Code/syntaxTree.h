@@ -25,5 +25,5 @@ typedef struct TreeNode{
 TreeNode* node_init(char* _name, enum syntax_type _type);
 void node_insert(int num, TreeNode*parent,  TreeNode*_children[]);
 void tree_display(TreeNode* root, int depth);
-TreeNode* treeRoot;
+extern TreeNode* treeRoot;
 #endif

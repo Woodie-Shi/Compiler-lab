@@ -1,6 +1,9 @@
 #include "analysis.h"
 
+FieldList hash_table[HASH];
+char* func_table[FUNCTION];
 static int isstructue = 0; 
+static int func_num = 0;
 
 unsigned int hash_pjw(char* name){
     unsigned int val = 0, i;
@@ -181,7 +184,7 @@ Type get_type_func(TreeNode* root){
                 while(1){
                     FieldList l = (FieldList)malloc(sizeof(struct FieldList_));
 			        l->type = Exp(params->children[0]);
-                    merge_field(type->u.function.params, l);
+                    merge_field(&type->u.function.params, l);
 			        if(params->children_num == 1) break;
                     params = params->children[2];
                 }
@@ -195,7 +198,7 @@ Type get_type_func(TreeNode* root){
     }
 }
 
-Type get_type_assgnop(TreeNode* root){
+Type get_type_assignop(TreeNode* root){
     if(root->children[0]->children_num == 1){
         if(strcmp(root->children[0]->children[0]->name,"ID")){
             printf("Error type 6 at Line %d: The left-hand side of an assignment must be a variable.\n",root->lineno);
@@ -257,7 +260,7 @@ Type get_type_logic(TreeNode* root){
 }
 
 Type Exp(TreeNode* root){
-    if(!root) return root;
+    if(!root) return NULL;
     // INT || FLOAT || ID
     if(root->children_num == 1) return get_type_one(root);
     // Exp DOT ID
@@ -271,7 +274,7 @@ Type Exp(TreeNode* root){
         return get_type_func(root);
     }
     // Exp ASSIGNOP Exp
-    else if(strcmp(root->children[1]->name, "ASSIGNOP")) return get_type_assignop(root);
+    else if(strcmp(root->children[1]->name, "ASSIGNOP") == 0) return get_type_assignop(root);
     // LP Exp RP | MINUS Exp | NOT Exp
     else if((strcmp(root->children[0]->name, "LP") == 0)
     ||(strcmp(root->children[0]->name, "MINUS") == 0)
@@ -441,7 +444,7 @@ FieldList VarDec(TreeNode* root, Type type){
 		while(VarDec->children_num == 4){
 			Type temp = (Type)malloc(sizeof(struct Type_));
 			temp->kind = ARRAY;
-            temp->u.array.size = VarDec->children[2]->val_str;
+            temp->u.array.size = VarDec->children[2]->val_int;
 			if(!t){
 				t = temp;
 				t->u.array.elem = type;
@@ -526,7 +529,7 @@ Type Specifier(TreeNode* root){
 			}
         }
 		else{
-			struct Node* deflist = StructSpecifier->children[3];
+			TreeNode* deflist = StructSpecifier->children[3];
 			isstructue++;
 			FieldList f = DefList(deflist);
 			fill_in_list(f);
@@ -543,7 +546,7 @@ Type Specifier(TreeNode* root){
 				if(query(s->name)){
 					printf("Error type 16 at line %d: Duplicated name \"%s\".\n", StructSpecifier->lineno, s->name);
                 }
-                else insert(s);
+                else fill_in(s);
 			}
 		}
 	}
@@ -567,8 +570,8 @@ void ExtDefList(TreeNode* root){
 		if(strcmp(ExtDef->children[1]->name, "FunDec") == 0)
 		{
 			bool flag = (strcmp(ExtDef->children[2]->name, "CompSt") == 0);
-			struct Type* ftype = FunDec(ExtDef->children[1], type, flag);
-			if(flag) CompSt(ExtDef->children[2], ftype);
+			Type t = FunDec(ExtDef->children[1], type, flag);
+			if(flag) CompSt(ExtDef->children[2], t);
 		}
         // ExtDef → Specifier ExtDecList SEMI
 		else if(strcmp(ExtDef->children[1]->name, "ExtDecList") == 0){

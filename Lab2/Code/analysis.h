@@ -1,6 +1,5 @@
 #ifndef _ANALYSIS_H_
 #define _ANALYSIS_H_
-
 #include<stdbool.h>
 #include <assert.h>
 #include "syntaxTree.h"
@@ -50,9 +49,8 @@ struct FieldList_
     int lineno;
 };
 
-FieldList hash_table[HASH];
-char* func_table[FUNCTION];
-int func_num = 0;
+extern FieldList hash_table[HASH];
+extern char* func_table[FUNCTION];
 
 unsigned int hash_pjw(char* name);
 
@@ -69,6 +67,5 @@ Type FunDec(TreeNode* root, Type return_type, bool flag);
 void CompSt(TreeNode* root, Type function);
 void Stmt(TreeNode* root, Type function);
 Type Exp(TreeNode* root);
-
 
 #endif
