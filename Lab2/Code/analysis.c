@@ -178,7 +178,7 @@ bool check_equivalent(Type x, Type y){
         }
         return false;
         break;
-    default :
+    default ://Function
         if(x->u.function.returnVal && y->u.function.returnVal){
             if(!check_equivalent(x->u.function.returnVal, y->u.function.returnVal)) return false;
             FieldList f1 = x->u.function.params;
