@@ -6,6 +6,7 @@
     #include "lex.yy.c"
     int Error = 0;
     extern int yylineno;
+    extern TreeNode* treeRoot;
     void yyerror(char *msg);
     void print_error(char* msg);
 %}
@@ -82,6 +83,12 @@ ExtDef : Specifier ExtDecList SEMI{
         TreeNode* children[] = {$1, $2};
         node_insert(2, $$, children);
     }
+    //new for func Declare
+    | Specifier FunDec SEMI {
+        $$=node_init("ExtDef", syntactic);
+        TreeNode* children[] = {$1, $2, $3};
+        node_insert(3, $$, children);
+    }
     | Specifier FunDec CompSt{
         $$ = node_init("ExtDef", syntactic);
         TreeNode* children[] = {$1, $2, $3};
@@ -101,7 +108,7 @@ ExtDecList : VarDec{
     | VarDec error ExtDecList{    
         Error++;
         print_error("Missing \",\".");
-        }
+    }
     ;
 
 //Specifiers
@@ -154,7 +161,7 @@ VarDec : ID{
 		TreeNode *children[] = {$1, $2, $3, $4};
 		node_insert(4, $$, children);
     }
-    | VarDec LB error{
+    | VarDec LB error RB{
         Error++;
         print_error("Missing \"]\".");
         }
@@ -169,10 +176,13 @@ FunDec : ID LP VarList RP{
 		TreeNode *children[] = {$1, $2, $3};
 		node_insert(3, $$, children);
     }
-    | error LP VarList RP  {
+    /*| error LP VarList RP  {
         Error++;
         print_error("Missing function name."); 
-        }
+        }*/
+    |  error RP{
+        Error++;
+    }
     ;
 VarList : ParamDec COMMA VarList{
     $$ = node_init("VarList", syntactic);
@@ -194,10 +204,10 @@ ParamDec : Specifier VarDec{
         Error++;
         print_error("Missing \";\".");
     }
-    | error RP{
+    /*| error RP{
         Error++;
         print_error("Missing \")\".");
-    }
+    }*/
     ;
 
 //Statements
@@ -451,10 +461,10 @@ Exp : Exp ASSIGNOP Exp{
         Error++;
         print_error("Syntax error."); 
     }
-    | ID LP error SEMI{
+    /*| ID LP error SEMI{
         Error++;
         print_error("Missing \")\"."); 
-        }
+        }*/
     | Exp LB error RB{
         Error++;
         print_error("Missing \"]\".");

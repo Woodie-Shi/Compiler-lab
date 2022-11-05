@@ -8,6 +8,9 @@ extern FILE* yyin;
 extern void yyrestart(FILE *);
 extern int yyparse();
 extern int Error;
+extern void show_symbol();
+
+TreeNode* treeRoot = NULL;
 
 int main(int argc, char** argv)
 {
@@ -18,10 +21,15 @@ int main(int argc, char** argv)
         return 1;
     }
     yylineno = 1;
+    
     yyrestart(f);
     yyparse();
-    /*if(!Error) tree_display(treeRoot, 0);*/
-    if(!Error) Program(treeRoot);
+    
+    if(!Error){
+        init_hash();
+        Program(treeRoot);
+        //show_symbol();
+    }
     return 0;
 }
 /*int main(int argc, char** argv) {

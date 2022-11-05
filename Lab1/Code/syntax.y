@@ -6,6 +6,7 @@
     #include "lex.yy.c"
     int Error = 0;
     extern int yylineno;
+    extern TreeNode* treeRoot;
     void yyerror(char *msg);
     void print_error(char* msg);
 %}

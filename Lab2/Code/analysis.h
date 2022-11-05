@@ -58,6 +58,8 @@ void init_hash();
 bool fill_in(FieldList f);
 FieldList query(char* name);
 
+void show_symbol();
+
 void Program(TreeNode* root);
 void ExtDefList(TreeNode* root);
 Type Specifier(TreeNode* root);

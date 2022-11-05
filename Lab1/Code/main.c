@@ -8,6 +8,8 @@ extern void yyrestart(FILE *);
 extern int yyparse();
 extern int Error;
 
+TreeNode* treeRoot = NULL;
+
 int main(int argc, char** argv)
 {
     if (argc <= 1) return 1;

@@ -1,7 +1,4 @@
 #include "syntaxTree.h"
-
-TreeNode* treeRoot;
-
 TreeNode* node_init(char* _name, enum syntax_type _type){
     struct TreeNode* newnode = (struct TreeNode* )malloc(sizeof(struct TreeNode));
     newnode->children_num = 0;

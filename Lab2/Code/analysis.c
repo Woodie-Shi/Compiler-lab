@@ -42,6 +42,14 @@ FieldList query(char* name){
     return NULL;
 }
 
+void show_symbol(){
+	for(int i = 0;i < HASH;i++){
+		if(hash_table[i]!=NULL){
+            printf("name:%s\n",hash_table[i]->name);
+        }
+    }
+}
+
 /*Expressions
 Exp : Exp ASSIGNOP Exp
     | Exp AND Exp
@@ -109,9 +117,27 @@ Type get_type_structure(TreeNode* root){
 
 Type get_type_array(TreeNode* root){
 	Type temp = Exp(root->children[0]);
-	if(Exp(root->children[2])->u.basic != 1) printf("Error type 12 at Line %d: \"%f\" is not an integer.\n", root->lineno, root->val_float);
+	if(Exp(root->children[2])->u.basic != 1) printf("Error type 12 at Line %d: \"%g\" is not an integer.\n", root->lineno, root->children[2]->children[0]->val_float);
 	if(temp){
-        if(temp->kind != ARRAY) printf("Error type 10 at Line %d: \"%s\" is not an array.\n", root->lineno, root->val_str);
+        TreeNode* tmp = root->children[0];
+        char *s;
+        switch(tmp->children_num){
+            case 1:
+                if(strcmp(tmp->children[0]->name, "ID") == 0) s = tmp->children[0]->val_str;
+                break;
+            case 3:
+                if(strcmp(tmp->children[2]->name, "ID") == 0) s = tmp->children[0]->val_str;
+                break;
+            case 4:
+                if(strcmp(tmp->children[0]->name,"Exp") == 0){
+                    if(strcmp(tmp->children[0]->children[0]->name,"ID") == 0) s = tmp->children[0]->children[0]->val_str;
+                }
+                break;
+            default:
+                s = ""; 
+                break;
+        }
+        if(temp->kind != ARRAY) printf("Error type 10 at Line %d: \"%s\" is not an array.\n", root->lineno, s);
         else return temp->u.array.elem;
     }
     else assert(0);
@@ -173,7 +199,7 @@ Type get_type_func(TreeNode* root){
 	FieldList f = query(root->children[0]->val_str);
 	if(!f) printf("Error type 2 at Line %d: Undefined function \"%s\".\n", root->lineno, root->children[0]->val_str);
     else{
-        if(f->type->kind != FUNCTION) printf("Error type 11 at Line %d: \"%s\" is not a function.\n", root->lineno, root->val_str);
+        if(f->type->kind != FUNCTION) printf("Error type 11 at Line %d: \"%s\" is not a function.\n", root->lineno, root->children[0]->val_str);
         else{
             TreeNode* params = NULL;
 		    if(root->children_num == 4) params = root->children[2];
@@ -190,8 +216,30 @@ Type get_type_func(TreeNode* root){
                 }
             }
 		    if(!check_equivalent(type, f->type)){
-                printf("Error type 9 at Line %d: Function \"%s\" is not applicable for arguments (a ,b).\n", root->lineno, root->name);
+                //printf("Error type 9 at Line %d: Function \"%s\" is not applicable for arguments (a ,b).\n", root->lineno, root->val_str);
+                printf("Error type 9 at Line %d: Function \"%s(", root->lineno, root->children[0]->val_str);
+                FieldList temp = f;
+                FieldList tmp = type->u.function.params;
+                while(temp){
+                    if(temp->type->kind == 0){
+                        if(temp->type->u.basic == 1) printf("int");
+                        else printf("float");
+                    }
+                    if(temp->tail) printf(", ");
+                    temp = temp->tail;
+                }
+                printf(")\" is not applicable for arguments \"(\n");
+                while(tmp){
+                    if(tmp->type->kind == 0){
+                        if(tmp->type->u.basic == 1) printf("int");
+                        else printf("float");
+                    }
+                    if(tmp->tail) printf(", ");
+                    tmp = tmp->tail;
+                }
+                printf(")\".\n");
             }
+
             return f->type->u.function.returnVal;
 	    }
         return NULL;
@@ -395,7 +443,7 @@ Type FunDec(TreeNode* root, Type return_type, bool flag){
 	type->kind = FUNCTION;
 	type->u.function.params = params;
 	type->u.function.returnVal = return_type;
-    type->u.function.status = flag ? DEFINED : DECLARED;
+    type->u.function.status = (flag == 1) ? DEFINED : DECLARED;
 
     FieldList f = query(root->children[0]->val_str);
     if(f){
@@ -412,6 +460,7 @@ Type FunDec(TreeNode* root, Type return_type, bool flag){
                 }
             }
             if(flag) f->type->u.function.status = 1;
+            else f->type->u.function.status = 0;
         }
     }
     else{
@@ -559,20 +608,25 @@ Type Specifier(TreeNode* root){
     ExtDef → Specifier ExtDecList SEMI
     | Specifier SEMI
     | Specifier FunDec CompSt
+    (*)
+    | Specifier FunDec SEMI
 
     ExtDecList → VarDec
     | VarDec COMMA ExtDecList*/
 void ExtDefList(TreeNode* root){
-	while(root->children_num == 2){
-		TreeNode *ExtDef = root->children[0];
+    TreeNode *ExtDefList = root;
+	while(ExtDefList->children_num == 2){
+		TreeNode *ExtDef = ExtDefList->children[0];
 		Type type = Specifier(ExtDef->children[0]);
-        /*ExtDef → Specifier FunDec CompSt*/
-		if(strcmp(ExtDef->children[1]->name, "FunDec") == 0)
-		{
+        /*ExtDef → Specifier FunDec CompSt
+                                Specifier FunDec SEMI
+        */
+		if(strcmp(ExtDef->children[1]->name, "FunDec") == 0){
 			bool flag = (strcmp(ExtDef->children[2]->name, "CompSt") == 0);
 			Type t = FunDec(ExtDef->children[1], type, flag);
 			if(flag) CompSt(ExtDef->children[2], t);
 		}
+        
         // ExtDef → Specifier ExtDecList SEMI
 		else if(strcmp(ExtDef->children[1]->name, "ExtDecList") == 0){
 			TreeNode* ExtDecList = ExtDef->children[1];
@@ -587,7 +641,7 @@ void ExtDefList(TreeNode* root){
 				ExtDecList = ExtDecList->children[2];
 			}
 		}
-		root = root->children[1];
+		ExtDefList = ExtDefList->children[1];
 	}	
 }
 
