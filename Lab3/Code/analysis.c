@@ -16,6 +16,39 @@ unsigned int hash_pjw(char* name){
 
 void init_hash(){
     for(int i = 0;i < HASH;i++) hash_table[i] = NULL;
+
+    // int read()  & int write(int)
+	Type integer = (Type)malloc(sizeof(struct Type_));
+	integer->kind = BASIC;
+	integer->u.basic = 1;
+
+    Type t = (Type)malloc(sizeof(struct Type_));
+	t->kind = FUNCTION;
+	t->u.function.status = DEFINED;
+	t->u.function.returnVal = integer;
+	t->u.function.params = NULL;
+
+    char *read = "read";
+	FieldList READ = (FieldList)malloc(sizeof(struct FieldList_));
+    READ->name = read;
+	READ->type = t;
+    bool r = fill(READ);
+    if(!r){
+        printf("Error during inserting function read.\n");
+        assert(0);
+    }
+
+	char *write = "write";
+	FieldList WRITE = (FieldList)malloc(sizeof(struct FieldList_));
+    WRITE->name = write;
+	t->u.function.params = (FieldList)malloc(sizeof(struct FieldList_));
+	t->u.function.params->type = integer;
+	WRITE->type = t;
+	r = fill(WRITE);
+    if(!r){
+        printf("Error during inserting function write.\n");
+        assert(0);
+    }
 }
 
 bool fill_in(FieldList f){
@@ -648,6 +681,7 @@ void ExtDefList(TreeNode* root){
 
 /*Program → ExtDefList*/
 void Program(TreeNode* root){
+    init_hash();
     ExtDefList(root->children[0]);
 	for(int i = 0; i < func_num; i++)
 	{
