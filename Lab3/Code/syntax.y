@@ -84,11 +84,11 @@ ExtDef : Specifier ExtDecList SEMI{
         node_insert(2, $$, children);
     }
     //new for func Declare
-    | Specifier FunDec SEMI {
+    /*| Specifier FunDec SEMI {
         $$=node_init("ExtDef", syntactic);
         TreeNode* children[] = {$1, $2, $3};
         node_insert(3, $$, children);
-    }
+    }*/
     | Specifier FunDec CompSt{
         $$ = node_init("ExtDef", syntactic);
         TreeNode* children[] = {$1, $2, $3};

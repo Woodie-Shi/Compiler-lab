@@ -27,16 +27,17 @@ void init_hash(){
 	t->u.function.status = DEFINED;
 	t->u.function.returnVal = integer;
 	t->u.function.params = NULL;
-
+    
     char *read = "read";
 	FieldList READ = (FieldList)malloc(sizeof(struct FieldList_));
     READ->name = read;
 	READ->type = t;
-    bool r = fill(READ);
+    bool r = fill_in(READ);
     if(!r){
         printf("Error during inserting function read.\n");
         assert(0);
     }
+    func_table[func_num++] = READ->name;
 
 	char *write = "write";
 	FieldList WRITE = (FieldList)malloc(sizeof(struct FieldList_));
@@ -44,11 +45,12 @@ void init_hash(){
 	t->u.function.params = (FieldList)malloc(sizeof(struct FieldList_));
 	t->u.function.params->type = integer;
 	WRITE->type = t;
-	r = fill(WRITE);
+	r = fill_in(WRITE);
     if(!r){
         printf("Error during inserting function write.\n");
         assert(0);
     }
+    func_table[func_num++] = WRITE->name;
 }
 
 bool fill_in(FieldList f){
@@ -213,17 +215,16 @@ bool check_equivalent(Type x, Type y){
         break;
         }
     default ://Function
-        if(x->u.function.returnVal && y->u.function.returnVal){
-            if(!check_equivalent(x->u.function.returnVal, y->u.function.returnVal)) return false;
-            FieldList f1 = x->u.function.params;
-            FieldList f2 = y->u.function.params;
-            while(f1 && f2){
-                if(!check_equivalent(f1->type, f2->type)) return false;
-                f1 = f1->tail;
-                f2 = f2->tail;
-            }
-            if(!f1 && !f2) return true;
+        if(x->u.function.returnVal && y->u.function.returnVal  
+        && !check_equivalent(x->u.function.returnVal, y->u.function.returnVal)) return false;
+        FieldList f1 = x->u.function.params;
+        FieldList f2 = y->u.function.params;
+        while(f1 && f2){
+            if(!check_equivalent(f1->type, f2->type)) return false;
+            f1 = f1->tail;
+            f2 = f2->tail;
         }
+        if(!f1 && !f2) return true;
         break;
     }
     return false;
@@ -233,6 +234,7 @@ Type get_type_func(TreeNode* root){
 	FieldList f = query(root->children[0]->val_str);
 	if(!f) printf("Error type 2 at Line %d: Undefined function \"%s\".\n", root->lineno, root->children[0]->val_str);
     else{
+        printf("FUNC: %s\n", root->children[0]->val_str);
         if(f->type->kind != FUNCTION) printf("Error type 11 at Line %d: \"%s\" is not a function.\n", root->lineno, root->children[0]->val_str);
         else{
             TreeNode* params = NULL;
@@ -560,6 +562,7 @@ FieldList DefList(TreeNode* root){
 			TreeNode* Vardec = Dec->children[0];
 			FieldList f = VarDec(Vardec, type);
             if(!isstructue){
+                //Dec → VarDec ASSIGNOP Exp
                 if(Dec->children_num == 3){
                     Type x = f->type;
 					Type y = Exp(Dec->children[2]);
@@ -681,7 +684,6 @@ void ExtDefList(TreeNode* root){
 
 /*Program → ExtDefList*/
 void Program(TreeNode* root){
-    init_hash();
     ExtDefList(root->children[0]);
 	for(int i = 0; i < func_num; i++)
 	{

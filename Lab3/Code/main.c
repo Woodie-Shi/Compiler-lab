@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include "syntaxTree.h"
 #include "analysis.h"
+#include "generation.h"
 
 extern int yylineno;
 extern FILE* yyin;
@@ -26,9 +27,13 @@ int main(int argc, char** argv)
     yyparse();
     
     if(!Error){
-        //init_hash();   或在analysis.c Program()中进行，未测试
+        init_hash(); 
         Program(treeRoot);
         //show_symbol();
+        FILE *file = stdout;
+	    if(argc == 3) file = fopen(argv[2], "wt");
+        translate(treeRoot, file);
+        fclose(file);
     }
     return 0;
 }

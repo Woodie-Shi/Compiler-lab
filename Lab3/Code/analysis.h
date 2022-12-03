@@ -62,9 +62,6 @@ FieldList query(char* name);
 
 void show_symbol();
 
-bool fill_in(FieldList f);
-FieldList query(char* name);
-
 void Program(TreeNode* root);
 void ExtDefList(TreeNode* root);
 Type Specifier(TreeNode* root);
