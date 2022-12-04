@@ -5,9 +5,9 @@
 #define TYPE_LABEL 3
 
 InterCodes codes;
-static struct Param *currentParams;
+struct Param *currentParams;
 
-char *newVar(int type){
+char *create_prefix(int type){
 	char *inf = malloc(5);
 	static int cntvar = 0, cnttemp = 0, cntlabel = 0;
 	int n;
@@ -234,8 +234,8 @@ int calculate_width(Type t) {
 void translate_Cond(struct TreeNode *root, Operand label_true, Operand label_false){
 	// Exp1 RELOP Exp 2
 	if(root->children_num == 3 && strcmp(root->children[1]->name, "RELOP") == 0){
-		Operand t1 = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
-		Operand t2 = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+		Operand t1 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
+		Operand t2 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 		translate_Exp(root->children[0], t1);
 		translate_Exp(root->children[2], t2);
 		char *Relop = root->children[1]->val_str;
@@ -244,14 +244,14 @@ void translate_Cond(struct TreeNode *root, Operand label_true, Operand label_fal
 	}
 	// Exp1 AND Exp2
 	else if(root->children_num == 3 && strcmp(root->children[1]->name, "AND") == 0){
-		Operand label1 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
+		Operand label1 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
 		translate_Cond(root->children[0], label1, label_false);
 		insert_code(singleOp(LABEL_, label1));
 		translate_Cond(root->children[2], label_true, label_false);
 	}
 	// Exp1 OR Exp2
 	else if(root->children_num == 3 && strcmp(root->children[1]->name, "OR") == 0){
-		Operand label1 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
+		Operand label1 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
 		translate_Cond(root->children[0], label_true, label1);
 		insert_code(singleOp(LABEL_, label1));
 		translate_Cond(root->children[2], label_true, label_false);
@@ -262,7 +262,7 @@ void translate_Cond(struct TreeNode *root, Operand label_true, Operand label_fal
 	}
 	// (other cases)
 	else{
-		Operand t1 = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+		Operand t1 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 		Operand zero = op_constant(0);
 		translate_Exp(root, t1);
 		insert_code(if_goto(t1, zero, label_true, "!="));
@@ -272,7 +272,7 @@ void translate_Cond(struct TreeNode *root, Operand label_true, Operand label_fal
 
 Arg translate_Args(struct TreeNode *root, Arg args){
 	// Exp
-	Operand t = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+	Operand t = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 	translate_Exp(root->children[0], t);
 	args = insert_arg(args, t);
 	// Exp COMMA Args1
@@ -285,7 +285,7 @@ void translate_Func(struct TreeNode *root, Operand place){
 	char *fname = root->children[0]->val_str;
 	if(strcmp(fname, "read") == 0) insert_code(singleOp(READ_, place));
 	else if(strcmp(fname, "write") == 0){
-		Operand t = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+		Operand t = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 		translate_Exp(root->children[2]->children[0], t);
 		insert_code(singleOp(WRITE_, t));
 	}
@@ -301,14 +301,14 @@ void translate_Func(struct TreeNode *root, Operand place){
 		}
 		// || ID LP RP
 		Operand function = op_var(FUNC, NORMAL, fname);
-		if(!place) place = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+		if(!place) place = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 		insert_code(binOp(CALL_, place, function));
 	}
 }
 
 void translate_Arithmetic(struct TreeNode *root, Operand place) {
-	Operand t1 = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
-	Operand t2 = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+	Operand t1 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
+	Operand t2 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 	translate_Exp(root->children[0], t1);
 	translate_Exp(root->children[2], t2);
 	enum INTER_CODE_KIND  kind;
@@ -321,14 +321,14 @@ void translate_Arithmetic(struct TreeNode *root, Operand place) {
 }
 
 Type translate_Array(struct TreeNode *root, Operand place) {
-	static char *var[10];
-	static int level = 0;
+	static char *var[20];
+	static int layer = 0;
 	Type ret = NULL;
 	if(strcmp(root->children[0]->children[0]->name, "ID") == 0){
 		struct TreeNode *ID = root->children[0]->children[0];
 		FieldList f = query(ID->val_str);
-		var[level++] = f->var;
-		place->u.str = newVar(TYPE_VAR);
+		var[layer++] = f->var;
+		place->u.str = create_prefix(TYPE_VAR);
 		Operand op = NULL;
 		if(strcmp(root->children[2]->children[0]->name, "INT") == 0){
 			int value = root->children[2]->children[0]->val_int * f->type->u.array.elem->width;
@@ -336,7 +336,7 @@ Type translate_Array(struct TreeNode *root, Operand place) {
 			insert_code(binOp(ASSIGN_, op_copy(place), op));
 		}
 		else{
-			op = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+			op = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 			translate_Exp(root->children[2], op);
 			Operand w = op_constant(f->type->u.array.elem->width);
 			insert_code(tripleOp(MUL_, op_copy(place), op, w));
@@ -346,10 +346,10 @@ Type translate_Array(struct TreeNode *root, Operand place) {
 	else{
 		Operand base = Operand_(VARIABLE, NORMAL);
 		Type type = translate_Array(root->children[0], base);
-		place->u.str = newVar(TYPE_TEMP);
+		place->u.str = create_prefix(TYPE_TEMP);
 
-		Operand op = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
-		Operand index = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+		Operand op = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
+		Operand index = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 		Operand width = op_constant(type->u.array.elem->width);
 		translate_Exp(root->children[2], index);
 		insert_code(tripleOp(MUL_, op, index, width));
@@ -357,8 +357,8 @@ Type translate_Array(struct TreeNode *root, Operand place) {
 		ret = type->u.array.elem;
 	}
 	if(ret->u.basic == 1){
-		Operand dest = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
-		Operand addr = op_var(VARIABLE, ADDRESS, var[--level]);
+		Operand dest = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
+		Operand addr = op_var(VARIABLE, ADDRESS, var[--layer]);
 		if(in_params(addr->u.str)) addr->type = NORMAL;
 		insert_code(tripleOp(ADD_, dest, addr, op_copy(place)));
 		place->type = STAR;
@@ -375,10 +375,10 @@ void translate_Assignop(struct TreeNode *root, Operand place){
 		dest = op_var(VARIABLE, NORMAL, f->var);
 	}
 	else{
-		dest = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+		dest = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 		translate_Array(root->children[0], dest);
 	}
-	Operand src = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+	Operand src = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 	translate_Exp(root->children[2], src);
 	insert_code(binOp(ASSIGN_, dest, src));
 	if(place) insert_code(binOp(ASSIGN_, place, dest));
@@ -406,8 +406,8 @@ void translate_Exp(struct TreeNode *root, Operand place)
 					&& (strcmp(root->children[1]->name, "RELOP") == 0 
 					|| strcmp(root->children[1]->name, "AND") == 0 
 					|| strcmp(root->children[1]->name, "OR") == 0))){
-		Operand label1 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
-		Operand	label2 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
+		Operand label1 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
+		Operand	label2 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
 		Operand zero = op_constant(0);
 		Operand one = op_constant(1);
 		insert_code(binOp(ASSIGN_, place, zero));
@@ -420,7 +420,7 @@ void translate_Exp(struct TreeNode *root, Operand place)
 	// MINUS Exp1
 	else if(root->children_num == 2){
 		Operand zero = op_constant(0);
-		Operand t1 = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+		Operand t1 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 		translate_Exp(root->children[1], t1);
 		insert_code(tripleOp(SUB_, place, zero, t1));
 	}
@@ -449,9 +449,9 @@ void translate_CompSt(struct TreeNode *root) {
 }
 
 void translate_While(struct TreeNode *root) {
-	Operand label1 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
-	Operand label2 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
-	Operand label3 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
+	Operand label1 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
+	Operand label2 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
+	Operand label3 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
 	insert_code(singleOp(LABEL_, label1));
 	translate_Cond(root->children[2], label2, label3);
 	insert_code(singleOp(LABEL_, label2));
@@ -461,21 +461,21 @@ void translate_While(struct TreeNode *root) {
 }
 
 void translate_Return(struct TreeNode *root) {
-	Operand op = op_var(VARIABLE, NORMAL, newVar(TYPE_TEMP));
+	Operand op = op_var(VARIABLE, NORMAL, create_prefix(TYPE_TEMP));
 	translate_Exp(root->children[1], op);
 	insert_code(singleOp(RETURN_, op));
 }
 
 void translate_If(struct TreeNode *root) {
-	Operand label1 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
-	Operand label2 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
+	Operand label1 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
+	Operand label2 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
 	Operand label3 = NULL;
 	translate_Cond(root->children[2], label1, label2);
 	insert_code(singleOp(LABEL_, label1));
 	translate_Stmt(root->children[4]);
 	bool Else = root->children_num == 7;
 	if(Else) {
-		label3 = op_var(VARIABLE, NORMAL, newVar(TYPE_LABEL));
+		label3 = op_var(VARIABLE, NORMAL, create_prefix(TYPE_LABEL));
 		insert_code(singleOp(GOTO_, label3));
 	}
 	insert_code(singleOp(LABEL_, label2));
@@ -520,7 +520,7 @@ void translate_DefList(struct TreeNode *root) {
 				printf("%s\n", "Can't translate: Code contains variables of structure type.");
 				assert(0);
 			}
-			var->var = newVar(TYPE_VAR);
+			var->var = create_prefix(TYPE_VAR);
 			if(var->type->kind == ARRAY) {	
 				var->type->width = calculate_width(var->type);
 				Operand decop = op_var(VARIABLE, NORMAL, var->var);
@@ -556,7 +556,7 @@ void translate_ExtDefList(struct TreeNode *root) {
 			insert_code(singleOp(FUNC_, func_op));
 			currentParams = NULL;
 			while(par) {
-				par->var = newVar(TYPE_VAR);
+				par->var = create_prefix(TYPE_VAR);
 				par->type->width = calculate_width(par->type);
 				insert_param(par->var);
 				Operand op_param = op_var(VARIABLE, NORMAL, par->var);

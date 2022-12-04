@@ -234,7 +234,7 @@ Type get_type_func(TreeNode* root){
 	FieldList f = query(root->children[0]->val_str);
 	if(!f) printf("Error type 2 at Line %d: Undefined function \"%s\".\n", root->lineno, root->children[0]->val_str);
     else{
-        printf("FUNC: %s\n", root->children[0]->val_str);
+        //printf("FUNC: %s\n", root->children[0]->val_str);
         if(f->type->kind != FUNCTION) printf("Error type 11 at Line %d: \"%s\" is not a function.\n", root->lineno, root->children[0]->val_str);
         else{
             TreeNode* params = NULL;
