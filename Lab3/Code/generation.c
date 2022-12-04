@@ -8,29 +8,29 @@ InterCodes codes;
 static struct Param *currentParams;
 
 char *newVar(int type){
-	char inf;
+	char *inf = malloc(5);
 	static int cntvar = 0, cnttemp = 0, cntlabel = 0;
 	int n;
 	switch((int)type)
 	{
 	case TYPE_VAR: 
-        inf = 'v'; 
-        n = cntvar++; 
+        inf = "v"; 
+        n = ++cntvar; 
         break;
 	case TYPE_TEMP: 
-        inf = 't'; 
-        n = cnttemp++; 
+        inf = "t"; 
+        n = ++cnttemp; 
         break;
 	case TYPE_LABEL: 
-        inf = 'L'; 
-        n = cntlabel++; 
+        inf = "label"; 
+        n = ++cntlabel; 
         break;
     default:
         printf("No match case in func new.\n");
         break;
 	}
-	char *ret;
-	sprintf(ret, "%c%d%c", inf, n, '\0');
+	char *ret = malloc(20);
+	sprintf(ret, "%s%d%c", inf, n, '\0');
 	return ret;
 }
 
@@ -509,7 +509,7 @@ void translate_DefList(struct TreeNode *root) {
 			//Dec → VarDec | VarDec ASSIGNOP Exp
 			struct TreeNode *VarDec = Dec->children[0];
 		
-			struct TreeNode* vdec;
+			struct TreeNode* vdec = VarDec;
 			// VarDec → ID | VarDec LB INT RB
 			while(vdec->children_num != 1){
 				vdec = vdec->children[0];
