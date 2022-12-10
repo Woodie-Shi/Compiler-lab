@@ -23,8 +23,6 @@ struct Operand_ {
     union {
         int value;
         char* str;
-        int tvar_no;
-        int label_no;
     } u;
 };
 
