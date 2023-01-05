@@ -1,28 +1,29 @@
 #ifndef _SYNTAXTREE_H
 #define _SYNTAXTREE_H
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
 
-extern char *yytext;
-extern int yyleng;
-extern int yylineno;
-
-enum syntax_type {lexical, syntactic};
-typedef struct TreeNode{
-    char* name;
-    union{
-        int val_int;
+#include <assert.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+enum DATATYPE { TYPE_INT, TYPE_OCT, TYPE_HEX, TYPE_FLOAT, TYPE_ID, TYPE_TYPE, OTHER };
+typedef struct treenode_* Node;
+#define MAX_CHILD_NODES 10
+struct treenode_ {
+    int line;                // 非终结符结点对应的行号
+    char name[32];           // 每个结点的名字类型
+    char val[64];            
+    int tokenFlag;           // 是否是终结符
+    enum DATATYPE datatype;  // 如果是int float ID TYPE要保存其对应的值
+    union {                  // 存储对应类型的值
+        unsigned val_int;
         float val_float;
-        char* val_str;
-    };
-    int children_num;
-    struct TreeNode** children;
-    int lineno;
-    enum syntax_type type;
-}TreeNode;
-
-TreeNode* node_init(char* _name, enum syntax_type _type);
-void node_insert(int num, TreeNode*parent,  TreeNode*_children[]);
-void tree_display(TreeNode* root, int depth);
+        char var_ID[64];
+    } data;
+    int child_num;
+    Node childs[MAX_CHILD_NODES];
+};
+void print_tree(Node mynode, int depth);                                     // 打印AST，depth表示深度
+Node token_node(const char* name, enum DATATYPE datatype, const char* val);  // terminator node
+Node nonterminal_node(const char* name, int line, int node_num, ...);  // nonterminal_node
+Node get_child(Node mynode, int child_idx);                            // 按照下标访问子节点
 #endif

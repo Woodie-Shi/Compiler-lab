@@ -1,10 +1,10 @@
 FUNCTION id_Sl3 : 
-PARAM var0 
-PARAM var1 
+PARAM v0 
+PARAM v1 
 t0 := #0 
 t1 := #0 
 t2 := #0 
-IF var0 > #0 GOTO label9 
+IF v0 > #0 GOTO label9 
 GOTO label10 
 LABEL label9 : 
 t2 := #1 
@@ -13,7 +13,7 @@ IF t2 != #0 GOTO label8
 GOTO label6 
 LABEL label8 : 
 t5 := #0 
-IF var1 > #0 GOTO label11 
+IF v1 > #0 GOTO label11 
 GOTO label12 
 LABEL label11 : 
 t5 := #1 
@@ -22,8 +22,8 @@ IF t5 != #0 GOTO label7
 GOTO label6 
 LABEL label7 : 
 t8 := #0 
-t10 := #2147483647 - var1 
-IF var0 > t10 GOTO label13 
+t10 := #2147483647 - v1 
+IF v0 > t10 GOTO label13 
 GOTO label14 
 LABEL label13 : 
 t8 := #1 
@@ -38,7 +38,7 @@ GOTO label4
 LABEL label4 : 
 t13 := #0 
 t14 := #0 
-IF var0 < #0 GOTO label19 
+IF v0 < #0 GOTO label19 
 GOTO label20 
 LABEL label19 : 
 t14 := #1 
@@ -47,7 +47,7 @@ IF t14 != #0 GOTO label18
 GOTO label16 
 LABEL label18 : 
 t17 := #0 
-IF var1 < #0 GOTO label21 
+IF v1 < #0 GOTO label21 
 GOTO label22 
 LABEL label21 : 
 t17 := #1 
@@ -56,8 +56,8 @@ IF t17 != #0 GOTO label17
 GOTO label16 
 LABEL label17 : 
 t20 := #0 
-t22 := #-2147483648 - var1 
-IF var0 < t22 GOTO label23 
+t22 := #-2147483648 - v1 
+IF v0 < t22 GOTO label23 
 GOTO label24 
 LABEL label23 : 
 t20 := #1 
@@ -75,16 +75,16 @@ LABEL label3 :
 IF t0 != #0 GOTO label0 
 GOTO label1 
 LABEL label0 : 
-RETURN var0 
+RETURN v0 
 LABEL label1 : 
-t27 := var0 + var1 
+t27 := v0 + v1 
 RETURN t27 
 FUNCTION id_ZSA0qxCv0H : 
-PARAM var2 
-PARAM var3 
+PARAM v2 
+PARAM v3 
 t30 := #0 
 t31 := #0 
-IF var2 > #0 GOTO label32 
+IF v2 > #0 GOTO label32 
 GOTO label33 
 LABEL label32 : 
 t31 := #1 
@@ -93,7 +93,7 @@ IF t31 != #0 GOTO label31
 GOTO label29 
 LABEL label31 : 
 t34 := #0 
-IF var3 < #0 GOTO label34 
+IF v3 < #0 GOTO label34 
 GOTO label35 
 LABEL label34 : 
 t34 := #1 
@@ -102,8 +102,8 @@ IF t34 != #0 GOTO label30
 GOTO label29 
 LABEL label30 : 
 t37 := #0 
-t39 := #2147483647 + var3 
-IF var2 > t39 GOTO label36 
+t39 := #2147483647 + v3 
+IF v2 > t39 GOTO label36 
 GOTO label37 
 LABEL label36 : 
 t37 := #1 
@@ -118,7 +118,7 @@ GOTO label27
 LABEL label27 : 
 t42 := #0 
 t43 := #0 
-IF var2 < #0 GOTO label42 
+IF v2 < #0 GOTO label42 
 GOTO label43 
 LABEL label42 : 
 t43 := #1 
@@ -127,7 +127,7 @@ IF t43 != #0 GOTO label41
 GOTO label39 
 LABEL label41 : 
 t46 := #0 
-IF var3 > #0 GOTO label44 
+IF v3 > #0 GOTO label44 
 GOTO label45 
 LABEL label44 : 
 t46 := #1 
@@ -136,8 +136,8 @@ IF t46 != #0 GOTO label40
 GOTO label39 
 LABEL label40 : 
 t49 := #0 
-t51 := #-2147483648 + var3 
-IF var2 < t51 GOTO label46 
+t51 := #-2147483648 + v3 
+IF v2 < t51 GOTO label46 
 GOTO label47 
 LABEL label46 : 
 t49 := #1 
@@ -150,17 +150,17 @@ LABEL label39 :
 IF t42 != #0 GOTO label25 
 GOTO label26 
 LABEL label25 : 
-RETURN var2 
+RETURN v2 
 LABEL label26 : 
-t56 := var2 - var3 
+t56 := v2 - v3 
 RETURN t56 
 FUNCTION id_c : 
-PARAM var4 
-PARAM var5 
+PARAM v4 
+PARAM v5 
 t59 := #0 
 t60 := #0 
 t61 := #0 
-IF var4 > #0 GOTO label59 
+IF v4 > #0 GOTO label59 
 GOTO label60 
 LABEL label59 : 
 t61 := #1 
@@ -169,7 +169,7 @@ IF t61 != #0 GOTO label58
 GOTO label56 
 LABEL label58 : 
 t64 := #0 
-IF var5 > #0 GOTO label61 
+IF v5 > #0 GOTO label61 
 GOTO label62 
 LABEL label61 : 
 t64 := #1 
@@ -178,8 +178,8 @@ IF t64 != #0 GOTO label57
 GOTO label56 
 LABEL label57 : 
 t67 := #0 
-t69 := #2147483647 / var5 
-IF var4 > t69 GOTO label63 
+t69 := #2147483647 / v5 
+IF v4 > t69 GOTO label63 
 GOTO label64 
 LABEL label63 : 
 t67 := #1 
@@ -194,7 +194,7 @@ GOTO label54
 LABEL label54 : 
 t72 := #0 
 t73 := #0 
-IF var4 > #0 GOTO label69 
+IF v4 > #0 GOTO label69 
 GOTO label70 
 LABEL label69 : 
 t73 := #1 
@@ -203,7 +203,7 @@ IF t73 != #0 GOTO label68
 GOTO label66 
 LABEL label68 : 
 t76 := #0 
-IF var5 <= #0 GOTO label71 
+IF v5 <= #0 GOTO label71 
 GOTO label72 
 LABEL label71 : 
 t76 := #1 
@@ -212,8 +212,8 @@ IF t76 != #0 GOTO label67
 GOTO label66 
 LABEL label67 : 
 t79 := #0 
-t81 := #-2147483648 / var4 
-IF var5 < t81 GOTO label73 
+t81 := #-2147483648 / v4 
+IF v5 < t81 GOTO label73 
 GOTO label74 
 LABEL label73 : 
 t79 := #1 
@@ -228,7 +228,7 @@ GOTO label53
 LABEL label53 : 
 t85 := #0 
 t86 := #0 
-IF var4 <= #0 GOTO label79 
+IF v4 <= #0 GOTO label79 
 GOTO label80 
 LABEL label79 : 
 t86 := #1 
@@ -237,7 +237,7 @@ IF t86 != #0 GOTO label78
 GOTO label76 
 LABEL label78 : 
 t89 := #0 
-IF var5 > #0 GOTO label81 
+IF v5 > #0 GOTO label81 
 GOTO label82 
 LABEL label81 : 
 t89 := #1 
@@ -246,8 +246,8 @@ IF t89 != #0 GOTO label77
 GOTO label76 
 LABEL label77 : 
 t92 := #0 
-t94 := #-2147483648 / var5 
-IF var4 < t94 GOTO label83 
+t94 := #-2147483648 / v5 
+IF v4 < t94 GOTO label83 
 GOTO label84 
 LABEL label83 : 
 t92 := #1 
@@ -262,7 +262,7 @@ GOTO label52
 LABEL label52 : 
 t98 := #0 
 t99 := #0 
-IF var4 <= #0 GOTO label90 
+IF v4 <= #0 GOTO label90 
 GOTO label91 
 LABEL label90 : 
 t99 := #1 
@@ -271,7 +271,7 @@ IF t99 != #0 GOTO label89
 GOTO label86 
 LABEL label89 : 
 t102 := #0 
-IF var5 <= #0 GOTO label92 
+IF v5 <= #0 GOTO label92 
 GOTO label93 
 LABEL label92 : 
 t102 := #1 
@@ -280,7 +280,7 @@ IF t102 != #0 GOTO label88
 GOTO label86 
 LABEL label88 : 
 t105 := #0 
-IF var4 != #0 GOTO label94 
+IF v4 != #0 GOTO label94 
 GOTO label95 
 LABEL label94 : 
 t105 := #1 
@@ -289,8 +289,8 @@ IF t105 != #0 GOTO label87
 GOTO label86 
 LABEL label87 : 
 t108 := #0 
-t110 := #2147483647 / var4 
-IF var5 < t110 GOTO label96 
+t110 := #2147483647 / v4 
+IF v5 < t110 GOTO label96 
 GOTO label97 
 LABEL label96 : 
 t108 := #1 
@@ -308,16 +308,16 @@ LABEL label51 :
 IF t59 != #0 GOTO label48 
 GOTO label49 
 LABEL label48 : 
-RETURN var4 
+RETURN v4 
 LABEL label49 : 
-t114 := var4 * var5 
+t114 := v4 * v5 
 RETURN t114 
 FUNCTION id_waAe : 
-PARAM var6 
-PARAM var7 
+PARAM v6 
+PARAM v7 
 t117 := #0 
 t118 := #0 
-IF var7 == #0 GOTO label103 
+IF v7 == #0 GOTO label103 
 GOTO label104 
 LABEL label103 : 
 t118 := #1 
@@ -327,7 +327,7 @@ GOTO label102
 LABEL label102 : 
 t121 := #0 
 t122 := #0 
-IF var6 == #-2147483648 GOTO label108 
+IF v6 == #-2147483648 GOTO label108 
 GOTO label109 
 LABEL label108 : 
 t122 := #1 
@@ -336,7 +336,7 @@ IF t122 != #0 GOTO label107
 GOTO label106 
 LABEL label107 : 
 t126 := #0 
-IF var7 == #-1 GOTO label110 
+IF v7 == #-1 GOTO label110 
 GOTO label111 
 LABEL label110 : 
 t126 := #1 
@@ -354,44 +354,44 @@ LABEL label101 :
 IF t117 != #0 GOTO label98 
 GOTO label99 
 LABEL label98 : 
-RETURN var6 
+RETURN v6 
 LABEL label99 : 
-t131 := var6 / var7 
+t131 := v6 / v7 
 RETURN t131 
 FUNCTION id_YGp4lO6 : 
-PARAM var8 
-PARAM var9 
-IF var8 < #0 GOTO label112 
+PARAM v8 
+PARAM v9 
+IF v8 < #0 GOTO label112 
 GOTO label114 
 LABEL label114 : 
-IF var8 >= var9 GOTO label112 
+IF v8 >= v9 GOTO label112 
 GOTO label113 
 LABEL label112 : 
 RETURN #0 
 LABEL label113 : 
-RETURN var8 
+RETURN v8 
 FUNCTION id_ProOd : 
-PARAM var10 
-PARAM var11 
-PARAM var12 
-PARAM var13 
+PARAM v10 
+PARAM v11 
+PARAM v12 
+PARAM v13 
 DEC array0 4 
 DEC array1 4 
 DEC array2 32 
 DEC array3 32 
 DEC array4 4 
-var14 := #32985 
-var15 := #13447 
-var16 := #19049 
-var17 := #6640 
+v14 := #32985 
+v15 := #13447 
+v16 := #19049 
+v17 := #6640 
 addr0 := &array0 
 *addr0 := #37806 
-var18 := #25503 
+v18 := #25503 
 addr1 := &array1 
 *addr1 := #2624 
-var19 := #20995 
-var20 := #15551 
-var21 := #1870 
+v19 := #20995 
+v20 := #15551 
+v21 := #1870 
 addr2 := &array2 
 *addr2 := #11254 
 addr4 := &array2 
@@ -415,19 +415,19 @@ addr13 := addr14 + #24
 addr16 := &array2 
 addr15 := addr16 + #28 
 *addr15 := #62750 
-var22 := #15065 
-var23 := #586 
-var24 := #11677 
-var25 := #23374 
-var26 := #56643 
-var27 := #34290 
-var28 := #25683 
-var29 := #14913 
-var30 := #11102 
-var31 := #45768 
-var32 := #3998 
-var33 := #6833 
-var34 := #43728 
+v22 := #15065 
+v23 := #586 
+v24 := #11677 
+v25 := #23374 
+v26 := #56643 
+v27 := #34290 
+v28 := #25683 
+v29 := #14913 
+v30 := #11102 
+v31 := #45768 
+v32 := #3998 
+v33 := #6833 
+v34 := #43728 
 addr17 := &array3 
 *addr17 := #36983 
 addr19 := &array3 
@@ -451,25 +451,25 @@ addr28 := addr29 + #24
 addr31 := &array3 
 addr30 := addr31 + #28 
 *addr30 := #13546 
-var35 := #38295 
+v35 := #38295 
 addr32 := &array4 
 *addr32 := #48117 
-var36 := #24801 
-var37 := #627 
-var38 := #57295 
-var39 := #6796 
-var40 := #8400 
-var41 := #41655 
+v36 := #24801 
+v37 := #627 
+v38 := #57295 
+v39 := #6796 
+v40 := #8400 
+v41 := #41655 
 t338 := #0 
-IF var10 != #0 GOTO label115 
+IF v10 != #0 GOTO label115 
 GOTO label117 
 LABEL label117 : 
-t340 := #0 - var12 
+t340 := #0 - v12 
 IF t340 != #0 GOTO label116 
 GOTO label118 
 LABEL label118 : 
 ARG #8 
-ARG var17 
+ARG v17 
 t344 := CALL id_YGp4lO6 
 t347 := t344 * #4 
 addr34 := &array2 
@@ -482,16 +482,16 @@ t338 := #1
 LABEL label116 : 
 t349 := #0 
 t350 := #0 
-ARG var12 
+ARG v12 
 t354 := #0 
-IF var23 != #0 GOTO label124 
+IF v23 != #0 GOTO label124 
 GOTO label123 
 LABEL label123 : 
 t354 := #1 
 LABEL label124 : 
 ARG t354 
 t352 := CALL id_ZSA0qxCv0H 
-IF var20 > t352 GOTO label121 
+IF v20 > t352 GOTO label121 
 GOTO label122 
 LABEL label121 : 
 t350 := #1 
@@ -499,7 +499,7 @@ LABEL label122 :
 ARG #51581 
 t359 := #0 
 ARG #1 
-ARG var13 
+ARG v13 
 t362 := CALL id_YGp4lO6 
 t365 := t362 * #4 
 addr36 := &array0 
@@ -515,11 +515,11 @@ t359 := #1
 LABEL label126 : 
 ARG t359 
 ARG #14558 
-t371 := #0 - var36 
+t371 := #0 - v36 
 ARG t371 
 t369 := CALL id_waAe 
 ARG t369 
-ARG var17 
+ARG v17 
 ARG #8 
 ARG #3 
 t377 := CALL id_YGp4lO6 
@@ -532,7 +532,7 @@ t373 := CALL id_Sl3
 ARG t373 
 ARG #56720 
 t383 := #0 
-IF #5614 == var12 GOTO label128 
+IF #5614 == v12 GOTO label128 
 GOTO label129 
 LABEL label128 : 
 t383 := #1 
@@ -542,12 +542,12 @@ t368 := CALL id_ProOd
 ARG t368 
 t386 := #0 
 t387 := #0 
-IF var11 == #39968 GOTO label132 
+IF v11 == #39968 GOTO label132 
 GOTO label133 
 LABEL label132 : 
 t387 := #1 
 LABEL label133 : 
-IF t387 != var22 GOTO label130 
+IF t387 != v22 GOTO label130 
 GOTO label131 
 LABEL label130 : 
 t386 := #1 
@@ -555,7 +555,7 @@ LABEL label131 :
 ARG t386 
 t357 := CALL id_ProOd 
 ARG t357 
-ARG var22 
+ARG v22 
 t356 := CALL id_Sl3 
 IF t350 == t356 GOTO label119 
 GOTO label120 
@@ -571,20 +571,20 @@ GOTO label144
 LABEL label143 : 
 t396 := #1 
 LABEL label144 : 
-IF t396 < var17 GOTO label141 
+IF t396 < v17 GOTO label141 
 GOTO label142 
 LABEL label141 : 
 t395 := #1 
 LABEL label142 : 
 ARG t395 
 t400 := #0 
-IF var15 != #0 GOTO label148 
+IF v15 != #0 GOTO label148 
 GOTO label147 
 LABEL label148 : 
-IF var16 != #0 GOTO label145 
+IF v16 != #0 GOTO label145 
 GOTO label147 
 LABEL label147 : 
-IF var37 != #0 GOTO label145 
+IF v37 != #0 GOTO label145 
 GOTO label146 
 LABEL label145 : 
 t400 := #1 
@@ -598,10 +598,10 @@ addr40 := &array4
 addr39 := addr40 + t409 
 t410 := *addr39 
 ARG t410 
-var14 := #40242 
+v14 := #40242 
 ARG #40242 
 t394 := CALL id_ProOd 
-IF t394 < var13 GOTO label139 
+IF t394 < v13 GOTO label139 
 GOTO label140 
 LABEL label139 : 
 t393 := #1 
@@ -611,7 +611,7 @@ ARG #3981
 t416 := CALL id_c 
 ARG t416 
 ARG #1 
-ARG var16 
+ARG v16 
 t421 := CALL id_YGp4lO6 
 t424 := t421 * #4 
 addr42 := &array1 
@@ -627,15 +627,15 @@ LABEL label138 :
 IF t392 != #0 GOTO label134 
 GOTO label135 
 LABEL label134 : 
-var42 := #22020 
-var43 := #24262 
-var44 := #61443 
-var45 := #107 
-var46 := #16813 
+v42 := #22020 
+v43 := #24262 
+v44 := #61443 
+v45 := #107 
+v46 := #16813 
 t441 := #0 
-ARG var29 
+ARG v29 
 ARG #8 
-ARG var17 
+ARG v17 
 t447 := CALL id_YGp4lO6 
 t450 := t447 * #4 
 addr44 := &array2 
@@ -645,7 +645,7 @@ ARG t451
 t443 := CALL id_c 
 ARG t443 
 t452 := #0 
-t454 := #0 - var11 
+t454 := #0 - v11 
 t453 := #0 - t454 
 IF t453 != #0 GOTO label152 
 GOTO label151 
@@ -670,13 +670,13 @@ t463 := #0
 t464 := #0 
 t465 := #0 
 ARG #30360 
-ARG var13 
-ARG var34 
+ARG v13 
+ARG v34 
 t468 := CALL id_c 
 ARG t468 
 t466 := CALL id_Sl3 
 t471 := #0 
-IF var42 != #0 GOTO label160 
+IF v42 != #0 GOTO label160 
 GOTO label159 
 LABEL label159 : 
 t471 := #1 
@@ -687,8 +687,8 @@ LABEL label157 :
 t465 := #1 
 LABEL label158 : 
 ARG #56947 
-ARG var14 
-ARG var36 
+ARG v14 
+ARG v36 
 t475 := CALL id_ZSA0qxCv0H 
 ARG t475 
 t473 := CALL id_Sl3 
@@ -714,7 +714,7 @@ t488 := *addr47
 ARG t488 
 ARG #55161 
 t481 := CALL id_ZSA0qxCv0H 
-IF t481 != var43 GOTO label164 
+IF t481 != v43 GOTO label164 
 GOTO label165 
 LABEL label164 : 
 t480 := #1 
@@ -725,7 +725,7 @@ LABEL label163 :
 t491 := #0 
 ARG #11409 
 ARG #8 
-ARG var11 
+ARG v11 
 t500 := CALL id_YGp4lO6 
 t503 := t500 * #4 
 addr50 := &array2 
@@ -733,18 +733,18 @@ addr49 := addr50 + t503
 t504 := *addr49 
 ARG t504 
 ARG #53536 
-ARG var45 
-ARG var21 
+ARG v45 
+ARG v21 
 t507 := CALL id_waAe 
 ARG t507 
 t505 := CALL id_waAe 
 ARG t505 
-t510 := #0 - var19 
+t510 := #0 - v19 
 ARG t510 
 t496 := CALL id_ProOd 
 ARG t496 
 ARG #1 
-ARG var18 
+ARG v18 
 t514 := CALL id_YGp4lO6 
 t517 := t514 * #4 
 addr52 := &array0 
@@ -752,7 +752,7 @@ addr51 := addr52 + t517
 t518 := *addr51 
 ARG t518 
 ARG #1 
-ARG var17 
+ARG v17 
 t521 := CALL id_YGp4lO6 
 t524 := t521 * #4 
 addr54 := &array0 
@@ -761,7 +761,7 @@ t525 := *addr53
 ARG t525 
 t526 := #0 
 t527 := #0 
-IF #6053 >= var20 GOTO label172 
+IF #6053 >= v20 GOTO label172 
 GOTO label173 
 LABEL label172 : 
 t527 := #1 
@@ -769,7 +769,7 @@ LABEL label173 :
 IF t527 != #0 GOTO label171 
 GOTO label170 
 LABEL label171 : 
-IF var18 != #0 GOTO label169 
+IF v18 != #0 GOTO label169 
 GOTO label170 
 LABEL label169 : 
 t526 := #1 
@@ -779,9 +779,9 @@ t495 := CALL id_ProOd
 t494 := #0 - t495 
 ARG t494 
 ARG #-36390 
-ARG var15 
+ARG v15 
 t535 := #0 
-IF var19 != #0 GOTO label175 
+IF v19 != #0 GOTO label175 
 GOTO label174 
 LABEL label174 : 
 t535 := #1 
@@ -790,7 +790,7 @@ ARG t535
 t533 := CALL id_waAe 
 ARG t533 
 t537 := #0 
-IF var15 != #0 GOTO label178 
+IF v15 != #0 GOTO label178 
 GOTO label177 
 LABEL label178 : 
 IF #62351 != #0 GOTO label176 
@@ -802,18 +802,18 @@ ARG t537
 t493 := CALL id_ProOd 
 ARG t493 
 t540 := #0 
-ARG var35 
+ARG v35 
 ARG #439 
 t541 := CALL id_c 
-IF t541 == var44 GOTO label179 
+IF t541 == v44 GOTO label179 
 GOTO label180 
 LABEL label179 : 
 t540 := #1 
 LABEL label180 : 
 ARG t540 
 ARG #61957 
-var38 := var36 
-ARG var36 
+v38 := v36 
+ARG v36 
 t492 := CALL id_ProOd 
 IF t492 >= #23345 GOTO label167 
 GOTO label168 
@@ -823,7 +823,7 @@ LABEL label168 :
 IF t491 != #0 GOTO label166 
 GOTO label162 
 LABEL label166 : 
-IF var22 != #0 GOTO label161 
+IF v22 != #0 GOTO label161 
 GOTO label162 
 LABEL label161 : 
 t479 := #1 
@@ -852,13 +852,13 @@ t556 := #1
 LABEL label186 : 
 ARG t556 
 ARG #2558 
-t563 := #0 - var23 
+t563 := #0 - v23 
 ARG t563 
 t561 := CALL id_ZSA0qxCv0H 
 ARG t561 
 t565 := #0 
 t566 := #0 
-IF var22 <= var33 GOTO label190 
+IF v22 <= v33 GOTO label190 
 GOTO label191 
 LABEL label190 : 
 t566 := #1 
@@ -866,7 +866,7 @@ LABEL label191 :
 IF t566 != #0 GOTO label189 
 GOTO label188 
 LABEL label189 : 
-IF var46 != #0 GOTO label187 
+IF v46 != #0 GOTO label187 
 GOTO label188 
 LABEL label187 : 
 t565 := #1 
@@ -878,22 +878,22 @@ LABEL label135 :
 t570 := #0 
 t571 := #0 
 t572 := #0 
-ARG var23 
+ARG v23 
 t575 := #0 
-IF var24 != #0 GOTO label201 
+IF v24 != #0 GOTO label201 
 GOTO label200 
 LABEL label200 : 
 t575 := #1 
 LABEL label201 : 
 ARG t575 
 t573 := CALL id_c 
-t577 := #0 - var25 
+t577 := #0 - v25 
 IF t573 >= t577 GOTO label198 
 GOTO label199 
 LABEL label198 : 
 t572 := #1 
 LABEL label199 : 
-IF t572 == var25 GOTO label196 
+IF t572 == v25 GOTO label196 
 GOTO label197 
 LABEL label196 : 
 t571 := #1 
@@ -923,12 +923,12 @@ GOTO label208
 LABEL label208 : 
 t590 := #1 
 LABEL label209 : 
-var13 := t590 
+v13 := t590 
 IF t590 != #0 GOTO label206 
 GOTO label207 
 LABEL label206 : 
 ARG #8 
-ARG var35 
+ARG v35 
 ARG #26364 
 t597 := CALL id_Sl3 
 ARG t597 
@@ -940,24 +940,24 @@ t601 := *addr57
 ARG t601 
 t603 := #0 
 t604 := #0 
-IF var38 <= var33 GOTO label212 
+IF v38 <= v33 GOTO label212 
 GOTO label213 
 LABEL label212 : 
 t604 := #1 
 LABEL label213 : 
-IF t604 == var34 GOTO label210 
+IF t604 == v34 GOTO label210 
 GOTO label211 
 LABEL label210 : 
 t603 := #1 
 LABEL label211 : 
 ARG t603 
 ARG #33642 
-ARG var12 
-ARG var12 
+ARG v12 
+ARG v12 
 t610 := CALL id_c 
 ARG t610 
 ARG #1 
-ARG var32 
+ARG v32 
 t616 := CALL id_YGp4lO6 
 t619 := t616 * #4 
 addr60 := &array0 
@@ -973,7 +973,7 @@ t608 := CALL id_ProOd
 ARG t608 
 t625 := #0 
 t626 := #0 
-IF var33 == var31 GOTO label217 
+IF v33 == v31 GOTO label217 
 GOTO label218 
 LABEL label217 : 
 t626 := #1 
@@ -981,7 +981,7 @@ LABEL label218 :
 IF t626 != #0 GOTO label216 
 GOTO label215 
 LABEL label216 : 
-IF var32 != #0 GOTO label214 
+IF v32 != #0 GOTO label214 
 GOTO label215 
 LABEL label214 : 
 t625 := #1 
@@ -1000,29 +1000,29 @@ t631 := CALL id_waAe
 ARG t631 
 t640 := #0 
 ARG #907 
-ARG var29 
+ARG v29 
 t641 := CALL id_ZSA0qxCv0H 
-IF t641 != var30 GOTO label219 
+IF t641 != v30 GOTO label219 
 GOTO label220 
 LABEL label219 : 
 t640 := #1 
 LABEL label220 : 
 ARG t640 
 ARG #1 
-ARG var41 
+ARG v41 
 t647 := CALL id_YGp4lO6 
 t650 := t647 * #4 
 addr64 := &array0 
 addr63 := addr64 + t650 
 t651 := *addr63 
 ARG t651 
-var28 := #38855 
+v28 := #38855 
 ARG #38855 
 t630 := CALL id_ProOd 
 ARG t630 
 t655 := #0 
 ARG #60389 
-ARG var37 
+ARG v37 
 t656 := CALL id_Sl3 
 IF t656 != #0 GOTO label221 
 GOTO label223 
@@ -1066,31 +1066,31 @@ LABEL label234 :
 IF #16418 != #0 GOTO label231 
 GOTO label233 
 LABEL label233 : 
-IF var27 != #0 GOTO label231 
+IF v27 != #0 GOTO label231 
 GOTO label232 
 LABEL label231 : 
 t673 := #1 
 LABEL label232 : 
 ARG t673 
 ARG #1 
-ARG var29 
+ARG v29 
 t679 := CALL id_YGp4lO6 
 t682 := t679 * #4 
 addr66 := &array0 
 addr65 := addr66 + t682 
 t683 := *addr65 
 ARG t683 
-ARG var24 
+ARG v24 
 ARG #10964 
 t685 := CALL id_Sl3 
 ARG t685 
-var15 := #51594 
+v15 := #51594 
 ARG #51594 
 t691 := #0 
 IF #31274 != #0 GOTO label237 
 GOTO label236 
 LABEL label237 : 
-IF var41 != #0 GOTO label235 
+IF v41 != #0 GOTO label235 
 GOTO label236 
 LABEL label235 : 
 t691 := #1 
@@ -1107,7 +1107,7 @@ t666 := #1
 LABEL label230 : 
 ARG t666 
 t695 := #0 
-IF var26 != #0 GOTO label238 
+IF v26 != #0 GOTO label238 
 GOTO label239 
 LABEL label238 : 
 t695 := #1 
@@ -1115,7 +1115,7 @@ LABEL label239 :
 ARG t695 
 t697 := #0 
 t698 := #0 
-IF #31167 <= var22 GOTO label243 
+IF #31167 <= v22 GOTO label243 
 GOTO label244 
 LABEL label243 : 
 t698 := #1 
@@ -1129,7 +1129,7 @@ LABEL label240 :
 t697 := #1 
 LABEL label241 : 
 ARG t697 
-ARG var41 
+ARG v41 
 t665 := CALL id_ProOd 
 ARG t665 
 t602 := CALL id_ProOd 
@@ -1142,15 +1142,15 @@ LABEL label203 :
 ARG #1 
 ARG #-30930 
 t710 := #0 
-ARG var19 
+ARG v19 
 t714 := #0 
 ARG #41739 
-ARG var41 
+ARG v41 
 t715 := CALL id_ZSA0qxCv0H 
 IF t715 != #0 GOTO label247 
 GOTO label249 
 LABEL label249 : 
-IF var36 != #0 GOTO label247 
+IF v36 != #0 GOTO label247 
 GOTO label248 
 LABEL label247 : 
 t714 := #1 
@@ -1158,7 +1158,7 @@ LABEL label248 :
 ARG t714 
 t719 := #0 
 ARG #28465 
-ARG var36 
+ARG v36 
 t720 := CALL id_waAe 
 IF t720 == #20573 GOTO label250 
 GOTO label251 
@@ -1168,26 +1168,26 @@ LABEL label251 :
 ARG t719 
 t724 := #0 
 ARG #45549 
-ARG var12 
+ARG v12 
 t725 := CALL id_waAe 
-IF t725 > var24 GOTO label252 
+IF t725 > v24 GOTO label252 
 GOTO label253 
 LABEL label252 : 
 t724 := #1 
 LABEL label253 : 
 ARG t724 
-ARG var40 
+ARG v40 
 ARG #26159 
 t729 := CALL id_waAe 
 ARG t729 
 t713 := CALL id_ProOd 
 ARG t713 
 t732 := #0 
-var15 := var19 
-ARG var19 
+v15 := v19 
+ARG v19 
 t737 := #0 
 t738 := #0 
-IF var41 > #4519 GOTO label260 
+IF v41 > #4519 GOTO label260 
 GOTO label261 
 LABEL label260 : 
 t738 := #1 
@@ -1195,13 +1195,13 @@ LABEL label261 :
 IF t738 != #0 GOTO label257 
 GOTO label259 
 LABEL label259 : 
-IF var39 != #0 GOTO label257 
+IF v39 != #0 GOTO label257 
 GOTO label258 
 LABEL label257 : 
 t737 := #1 
 LABEL label258 : 
 ARG t737 
-var21 := #23783 
+v21 := #23783 
 ARG #23783 
 t745 := #0 
 t746 := #0 
@@ -1210,7 +1210,7 @@ GOTO label265
 LABEL label264 : 
 t746 := #1 
 LABEL label265 : 
-IF t746 >= var38 GOTO label262 
+IF t746 >= v38 GOTO label262 
 GOTO label263 
 LABEL label262 : 
 t745 := #1 
@@ -1234,9 +1234,9 @@ t752 := #1
 LABEL label267 : 
 ARG t752 
 t755 := #0 
-ARG var19 
+ARG v19 
 t758 := #0 
-t759 := #0 - var38 
+t759 := #0 - v38 
 IF t759 != #0 GOTO label271 
 GOTO label270 
 LABEL label270 : 
@@ -1247,13 +1247,13 @@ t761 := #0
 ARG #19944 
 ARG #26687 
 t762 := CALL id_waAe 
-IF t762 != var37 GOTO label272 
+IF t762 != v37 GOTO label272 
 GOTO label273 
 LABEL label272 : 
 t761 := #1 
 LABEL label273 : 
 ARG t761 
-ARG var36 
+ARG v36 
 t756 := CALL id_ProOd 
 IF t756 != #0 GOTO label269 
 GOTO label268 
@@ -1262,10 +1262,10 @@ t755 := #1
 LABEL label269 : 
 ARG t755 
 t767 := #0 
-IF var36 != #0 GOTO label274 
+IF v36 != #0 GOTO label274 
 GOTO label277 
 LABEL label277 : 
-IF var19 != #0 GOTO label274 
+IF v19 != #0 GOTO label274 
 GOTO label276 
 LABEL label276 : 
 IF #20507 != #0 GOTO label274 
@@ -1277,12 +1277,12 @@ ARG t767
 t771 := #0 
 t773 := #0 
 ARG #61056 
-ARG var25 
+ARG v25 
 t774 := CALL id_ZSA0qxCv0H 
 IF t774 != #0 GOTO label283 
 GOTO label282 
 LABEL label283 : 
-IF var20 != #0 GOTO label281 
+IF v20 != #0 GOTO label281 
 GOTO label282 
 LABEL label281 : 
 t773 := #1 
@@ -1290,16 +1290,16 @@ LABEL label282 :
 ARG t773 
 t778 := #0 
 ARG #24103 
-ARG var18 
+ARG v18 
 t779 := CALL id_c 
-IF t779 != var33 GOTO label284 
+IF t779 != v33 GOTO label284 
 GOTO label285 
 LABEL label284 : 
 t778 := #1 
 LABEL label285 : 
 ARG t778 
 t783 := #0 
-t784 := #0 - var19 
+t784 := #0 - v19 
 IF t784 != #0 GOTO label287 
 GOTO label286 
 LABEL label286 : 
@@ -1307,7 +1307,7 @@ t783 := #1
 LABEL label287 : 
 ARG t783 
 t786 := #0 
-ARG var14 
+ARG v14 
 ARG #51909 
 t787 := CALL id_waAe 
 IF t787 != #0 GOTO label288 
@@ -1348,7 +1348,7 @@ LABEL label204 :
 LABEL label193 : 
 LABEL label136 : 
 t794 := #0 
-t795 := #0 - var32 
+t795 := #0 - v32 
 IF t795 != #0 GOTO label291 
 GOTO label292 
 LABEL label291 : 
@@ -1356,30 +1356,30 @@ t794 := #1
 LABEL label292 : 
 ARG t794 
 t798 := #0 
-IF var36 != #0 GOTO label293 
+IF v36 != #0 GOTO label293 
 GOTO label294 
 LABEL label293 : 
 t798 := #1 
 LABEL label294 : 
 ARG t798 
-ARG var16 
+ARG v16 
 t797 := CALL id_c 
 ARG t797 
 t793 := CALL id_c 
-WRITE var14 
-WRITE var15 
-WRITE var16 
-WRITE var17 
+WRITE v14 
+WRITE v15 
+WRITE v16 
+WRITE v17 
 addr69 := &array0 
 t814 := *addr69 
 WRITE t814 
-WRITE var18 
+WRITE v18 
 addr70 := &array1 
 t822 := *addr70 
 WRITE t822 
-WRITE var19 
-WRITE var20 
-WRITE var21 
+WRITE v19 
+WRITE v20 
+WRITE v21 
 addr71 := &array2 
 t834 := *addr71 
 WRITE t834 
@@ -1411,19 +1411,19 @@ addr85 := &array2
 addr84 := addr85 + #28 
 t876 := *addr84 
 WRITE t876 
-WRITE var22 
-WRITE var23 
-WRITE var24 
-WRITE var25 
-WRITE var26 
-WRITE var27 
-WRITE var28 
-WRITE var29 
-WRITE var30 
-WRITE var31 
-WRITE var32 
-WRITE var33 
-WRITE var34 
+WRITE v22 
+WRITE v23 
+WRITE v24 
+WRITE v25 
+WRITE v26 
+WRITE v27 
+WRITE v28 
+WRITE v29 
+WRITE v30 
+WRITE v31 
+WRITE v32 
+WRITE v33 
+WRITE v34 
 addr86 := &array3 
 t908 := *addr86 
 WRITE t908 
@@ -1455,28 +1455,28 @@ addr100 := &array3
 addr99 := addr100 + #28 
 t950 := *addr99 
 WRITE t950 
-WRITE var35 
+WRITE v35 
 addr101 := &array4 
 t958 := *addr101 
 WRITE t958 
-WRITE var36 
-WRITE var37 
-WRITE var38 
-WRITE var39 
-WRITE var40 
-WRITE var41 
+WRITE v36 
+WRITE v37 
+WRITE v38 
+WRITE v39 
+WRITE v40 
+WRITE v41 
 RETURN #15427 
 FUNCTION id_hioRHn : 
-PARAM var47 
-PARAM var48 
+PARAM v47 
+PARAM v48 
 DEC array5 8 
 addr102 := &array5 
 *addr102 := #34744 
 addr104 := &array5 
 addr103 := addr104 + #4 
 *addr103 := #4249 
-var49 := #16334 
-var50 := #15750 
+v49 := #16334 
+v50 := #15750 
 addr105 := &array5 
 t995 := *addr105 
 WRITE t995 
@@ -1484,10 +1484,10 @@ addr107 := &array5
 addr106 := addr107 + #4 
 t1001 := *addr106 
 WRITE t1001 
-WRITE var49 
-WRITE var50 
+WRITE v49 
+WRITE v50 
 t1006 := #0 
-IF var49 > #54513 GOTO label295 
+IF v49 > #54513 GOTO label295 
 GOTO label296 
 LABEL label295 : 
 t1006 := #1 
@@ -1500,12 +1500,12 @@ addr110 := &array5
 addr109 := addr110 + #4 
 t1022 := *addr109 
 WRITE t1022 
-WRITE var49 
-WRITE var50 
+WRITE v49 
+WRITE v50 
 t1027 := #0 
 ARG #2 
 t1032 := #0 
-IF var49 <= var50 GOTO label301 
+IF v49 <= v50 GOTO label301 
 GOTO label302 
 LABEL label301 : 
 t1032 := #1 
@@ -1519,11 +1519,11 @@ t1036 := *addr111
 IF t1036 != #0 GOTO label297 
 GOTO label300 
 LABEL label300 : 
-t1038 := #0 - var47 
+t1038 := #0 - v47 
 ARG t1038 
 t1040 := #0 
 t1041 := #0 
-IF var47 != var47 GOTO label307 
+IF v47 != v47 GOTO label307 
 GOTO label308 
 LABEL label307 : 
 t1041 := #1 
@@ -1531,7 +1531,7 @@ LABEL label308 :
 IF t1041 != #0 GOTO label306 
 GOTO label305 
 LABEL label306 : 
-IF var49 != #0 GOTO label304 
+IF v49 != #0 GOTO label304 
 GOTO label305 
 LABEL label304 : 
 t1040 := #1 
@@ -1541,12 +1541,12 @@ t1037 := CALL id_hioRHn
 IF t1037 != #0 GOTO label303 
 GOTO label299 
 LABEL label303 : 
-IF var49 != #0 GOTO label297 
+IF v49 != #0 GOTO label297 
 GOTO label299 
 LABEL label299 : 
 ARG #2 
 t1050 := #0 
-IF var49 > var48 GOTO label309 
+IF v49 > v48 GOTO label309 
 GOTO label310 
 LABEL label309 : 
 t1050 := #1 
@@ -1570,13 +1570,13 @@ addr117 := &array5
 addr116 := addr117 + #4 
 t1066 := *addr116 
 WRITE t1066 
-WRITE var49 
-WRITE var50 
+WRITE v49 
+WRITE v50 
 t1073 := #0 
 ARG #25678 
 ARG #8692 
 t1074 := CALL id_waAe 
-IF t1074 != var49 GOTO label311 
+IF t1074 != v49 GOTO label311 
 GOTO label312 
 LABEL label311 : 
 t1073 := #1 
@@ -1603,10 +1603,10 @@ t1072 := CALL id_hioRHn
 t1071 := #0 - t1072 
 RETURN t1071 
 FUNCTION id_tiv44_ : 
-PARAM var51 
+PARAM v51 
 DEC array6 20 
-var52 := #3149 
-var53 := #48873 
+v52 := #3149 
+v53 := #48873 
 addr120 := &array6 
 *addr120 := #49781 
 addr122 := &array6 
@@ -1630,7 +1630,7 @@ GOTO label321
 LABEL label320 : 
 t1130 := #1 
 LABEL label321 : 
-IF t1130 < var53 GOTO label318 
+IF t1130 < v53 GOTO label318 
 GOTO label319 
 LABEL label318 : 
 t1129 := #1 
@@ -1646,7 +1646,7 @@ LABEL label326 :
 IF t1135 != #0 GOTO label322 
 GOTO label324 
 LABEL label324 : 
-IF var52 != #0 GOTO label322 
+IF v52 != #0 GOTO label322 
 GOTO label323 
 LABEL label322 : 
 t1134 := #1 
@@ -1664,13 +1664,13 @@ LABEL label328 :
 ARG t1142 
 ARG #-22300 
 t1147 := #0 
-ARG var53 
-ARG var51 
+ARG v53 
+ARG v51 
 t1148 := CALL id_Sl3 
 IF t1148 != #0 GOTO label330 
 GOTO label332 
 LABEL label332 : 
-IF var52 != #0 GOTO label330 
+IF v52 != #0 GOTO label330 
 GOTO label331 
 LABEL label330 : 
 t1147 := #1 
@@ -1699,8 +1699,8 @@ t1140 := CALL id_tiv44_
 t1139 := #0 - t1140 
 ARG t1139 
 t1163 := #0 
-t1164 := #0 - var53 
-IF t1164 == var52 GOTO label336 
+t1164 := #0 - v53 
+IF t1164 == v52 GOTO label336 
 GOTO label337 
 LABEL label336 : 
 t1163 := #1 
@@ -1720,7 +1720,7 @@ t1162 := CALL id_hioRHn
 t1161 := #0 - t1162 
 ARG t1161 
 t1128 := CALL id_ProOd 
-ARG var52 
+ARG v52 
 ARG #10728 
 t1170 := CALL id_Sl3 
 IF t1128 <= t1170 GOTO label316 
@@ -1733,8 +1733,8 @@ t1125 := CALL id_YGp4lO6
 t1173 := t1125 * #4 
 addr132 := &array6 
 addr131 := addr132 + t1173 
-WRITE var52 
-WRITE var53 
+WRITE v52 
+WRITE v53 
 addr133 := &array6 
 t1183 := *addr133 
 WRITE t1183 
@@ -1754,17 +1754,17 @@ addr141 := &array6
 addr140 := addr141 + #16 
 t1207 := *addr140 
 WRITE t1207 
-RETURN var51 
+RETURN v51 
 FUNCTION id_E6tTOu5 : 
-var54 := #37979 
-var55 := #13261 
-ARG var55 
-ARG var55 
+v54 := #37979 
+v55 := #13261 
+ARG v55 
+ARG v55 
 t1216 := CALL id_waAe 
 ARG t1216 
 t1219 := #0 
 ARG #14977 
-ARG var54 
+ARG v54 
 t1220 := CALL id_waAe 
 IF t1220 < #54313 GOTO label341 
 GOTO label342 
@@ -1773,8 +1773,8 @@ t1219 := #1
 LABEL label342 : 
 ARG t1219 
 t1215 := CALL id_hioRHn 
-WRITE var54 
-WRITE var55 
+WRITE v54 
+WRITE v55 
 RETURN #29011 
 FUNCTION main : 
 t1230 := CALL id_E6tTOu5 

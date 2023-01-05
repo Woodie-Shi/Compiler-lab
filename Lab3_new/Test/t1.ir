@@ -1,13 +1,13 @@
 FUNCTION main : 
 READ t2 
-var0 := t2 
-IF var0 > #0 GOTO label0 
+v0 := t2 
+IF v0 > #0 GOTO label0 
 GOTO label1 
 LABEL label0 : 
 WRITE #1 
 GOTO label2 
 LABEL label1 : 
-IF var0 < #0 GOTO label3 
+IF v0 < #0 GOTO label3 
 GOTO label4 
 LABEL label3 : 
 WRITE #-1 

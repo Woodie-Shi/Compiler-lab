@@ -8,7 +8,6 @@
     extern int lexical_errs;
     extern YYSTYPE yylval;
     int yycolumn = 1;
-    extern int yydebug;
     #define YY_USER_ACTION \
     yylloc.first_line = yylloc.last_line = yylineno; \
     yylloc.first_column = yycolumn; \
@@ -388,5 +387,5 @@ void lexical_error_handler(char *msg){
 void add_token_node(const char* name, enum DATATYPE datatype, const char* val)
 {
     yylval.node = token_node(name, datatype, val);
-    if(yydebug) print_tree(yylval.node,0);
+    //if(yydebug) print_tree(yylval.node,0);
 }

@@ -10,7 +10,6 @@ FILE* ir_out;                        // the file pointer from which the translat
 int lexical_errs = 0;                // 出现的词法错误
 int syntax_errs = 0;                 // 出现的语法错误
 int semantic_errs = 0;               // 出现的语义错误
-extern int yydebug;                  // bison debug mode
 int semantic_debug = 0;              // semantic debug mode
 int translator_debug = 0;            // translator debug mode
 int translator_struct = 0;           // 是否处理结构体
@@ -35,14 +34,13 @@ int main(int argc, char** argv)
             perror(argv[2]);
             return 1;
         }
-        if (yydebug) printf("open file:%s\n", argv[1]);
     }
     yyrestart(yyin);
     yyparse();
     fclose(yyin);
     if (lexical_errs || syntax_errs) {
         /* meet erros */
-        if (yydebug) printf("totally meet %d lexical errors and %d syntax errors\n", lexical_errs, syntax_errs);
+        printf("totally meet %d lexical errors and %d syntax errors\n", lexical_errs, syntax_errs);
     } else {
         /* Print the AST tree */
         // print_tree(root, 0);
