@@ -97,34 +97,34 @@ Operand new_temp();                                                            /
 Operand new_addr();                                                            // 产生一个地址
 Operand new_label();                                                           // 产生一个跳转标记
 
-void translate_Program(Node root);
-void translate_ExtDefList(Node root);
-void translate_ExtDef(Node root);
+void translate_Program(TreeNode root);
+void translate_ExtDefList(TreeNode root);
+void translate_ExtDef(TreeNode root);
 /**
  * 假设4 没有全局变量,无需考虑ExtDecList
  * 变量类型在语义分析部分全部完成,无需考虑Specifier
  */
 
-Operand translate_VarDec(Node root);  // 返回变量OP
-void translate_FunDec(Node root);
+Operand translate_VarDec(TreeNode root);  // 返回变量OP
+void translate_FunDec(TreeNode root);
 /**
  * 直接获取函数定义的Field,直接获取参数列表
  * 无需再取考虑VarList ParamDec
  */
 
-void translate_CompSt(Node root);
-void translate_StmtList(Node root);
-void translate_Stmt(Node root);
+void translate_CompSt(TreeNode root);
+void translate_StmtList(TreeNode root);
+void translate_Stmt(TreeNode root);
 
-void translate_DefList(Node root);
-void translate_Def(Node root);
-void translate_DecList(Node root);
-void translate_Dec(Node root);
+void translate_DefList(TreeNode root);
+void translate_Def(TreeNode root);
+void translate_DecList(TreeNode root);
+void translate_Dec(TreeNode root);
 
-void translate_Exp(Node root, Operand place);
-void translate_Args(Node root, bool write_func);
+void translate_Exp(TreeNode root, Operand place);
+void translate_Args(TreeNode root, bool write_func);
 
-void translate_Cond(Node root, Operand true_label, Operand false_label);
+void translate_Cond(TreeNode root, Operand true_label, Operand false_label);
 
 Operand array_deep_copy(Operand op_left, Operand op_right);  // 数组深拷贝
 
@@ -134,6 +134,6 @@ Operand get_addr(Operand addr, bool is_arg);  // 获取数组的地址，以及�
 
 int get_size(Type type);  // 获取数组或者结构体的大小
 
-void dump_translator_node(Node node, char* translator_name);  // debug func
+void dump_translator_node(TreeNode node, char* translator_name);  // debug func
 
 #endif

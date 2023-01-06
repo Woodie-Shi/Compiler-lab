@@ -1,85 +1,85 @@
 #include "syntaxTree.h"
-void print_tree(Node mynode, int depth) {
-    if (mynode == NULL) return;
+void tree_display(TreeNode newnode, int depth) {
+    if (newnode == NULL) return;
     for (int i = 0; i < depth; i++) printf("  ");
-    printf("%s", mynode->name);
-    if (mynode->tokenFlag) {
-        switch (mynode->datatype) {
+    printf("%s", newnode->name);
+    if (newnode->terminal) {
+        switch (newnode->datatype) {
             case TYPE_ID:
-                printf(": %s", mynode->data.var_ID);
+                printf(": %s", newnode->data.var_str);
                 break;
             case TYPE_TYPE:
-                printf(": %s", mynode->data.var_ID);
+                printf(": %s", newnode->data.var_str);
                 break;
             case TYPE_FLOAT:
-                printf(": %.6f", mynode->data.val_float);
+                printf(": %.6f", newnode->data.val_float);
                 break;
             case TYPE_INT:
-                printf(": %u", mynode->data.val_int);
+                printf(": %u", newnode->data.val_int);
                 break;
             default:
                 break;
         }
     } else {
-        printf(" (%d)", mynode->line);
+        printf(" (%d)", newnode->line);
     }
     printf("\n");
-    if (mynode->tokenFlag == 0) {
-        for (int i = 0; i < mynode->child_num; i++) {
-            print_tree(mynode->childs[i], depth + 1);
+    if (newnode->terminal == 0) {
+        for (int i = 0; i < newnode->children_num; i++) {
+            tree_display(newnode->children[i], depth + 1);
         }
     }
 }
-Node token_node(const char* name, enum DATATYPE datatype, const char* val) {
-    Node mynode = (Node)malloc(sizeof(struct treenode_));
-    mynode->tokenFlag = 1;
-    mynode->datatype = datatype;
-    sscanf(name, "%s", mynode->name);
-    if (val) sscanf(val, "%s", mynode->val);
-    switch (mynode->datatype) {
+TreeNode node_init(const char* name, enum syntax_type datatype, const char* val) {
+    TreeNode newnode = (TreeNode)malloc(sizeof(struct TreeNode_));
+    newnode->terminal = 1;
+    newnode->datatype = datatype;
+    sscanf(name, "%s", newnode->name);
+    if (val) sscanf(val, "%s", newnode->val);
+    switch (newnode->datatype) {
         case TYPE_ID:
-            sscanf(val, "%s", mynode->data.var_ID);
+            sscanf(val, "%s", newnode->data.var_str);
             break;
         case TYPE_TYPE:
-            sscanf(val, "%s", mynode->data.var_ID);
+            sscanf(val, "%s", newnode->data.var_str);
             break;
         case TYPE_FLOAT:
-            sscanf(val, "%f", &mynode->data.val_float);
+            sscanf(val, "%f", &newnode->data.val_float);
             break;
         case TYPE_INT:
-            sscanf(val, "%u", &mynode->data.val_int);
+            sscanf(val, "%u", &newnode->data.val_int);
             break;
         case TYPE_OCT:
-            sscanf(val, "%o", &mynode->data.val_int);
-            mynode->datatype = TYPE_INT;
+            sscanf(val, "%o", &newnode->data.val_int);
+            newnode->datatype = TYPE_INT;
             break;
         case TYPE_HEX:
-            sscanf(val, "%x", &mynode->data.val_int);
-            mynode->datatype = TYPE_INT;
+            sscanf(val, "%x", &newnode->data.val_int);
+            newnode->datatype = TYPE_INT;
             break;
         default:
             break;
     }
-    return mynode;
+    return newnode;
 }
-Node nonterminal_node(const char* name, int line, int node_num, ...) {
-    Node mynode = (Node)malloc(sizeof(struct treenode_));
-    for (int i = 0; i < MAX_CHILD_NODES; i++) {
-        mynode->childs[i] = NULL;
+TreeNode node_insert(const char* name, int line, int node_num, ...) {
+    TreeNode newnode = (TreeNode)malloc(sizeof(struct TreeNode_));
+    for (int i = 0; i < MAX_CHILDREN; i++) {
+        newnode->children[i] = NULL;
     }
-    mynode->line = line;
-    mynode->tokenFlag = 0;
-    mynode->child_num = node_num;
-    sscanf(name, "%s", mynode->name);
+    newnode->line = line;
+    newnode->terminal = 0;
+    newnode->children_num = node_num;
+    sscanf(name, "%s", newnode->name);
     va_list valist;
     va_start(valist, node_num);
     for (int i = 0; i < node_num; i++) {
-        mynode->childs[i] = va_arg(valist, Node);
+        newnode->children[i] = va_arg(valist, TreeNode);
     }
     va_end(valist);
-    return mynode;
+    return newnode;
 }
-Node get_child(Node mynode, int child_idx) {
-    assert(child_idx < mynode->child_num);
-    return mynode->childs[child_idx];
+TreeNode get_child(TreeNode newnode, int child_idx) {
+    assert(child_idx < newnode->children_num);
+    return newnode->children[child_idx];
 }

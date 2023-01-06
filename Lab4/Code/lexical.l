@@ -18,7 +18,7 @@
     void show_info(char *str);
     int yylex();
     void show_lexerr(char *msg);
-    void add_node(const char* name, enum DATATYPE datatype, const char* val);
+    void add_node(const char* name, enum syntax_type datatype, const char* val);
 %}
 %option yylineno
 
@@ -385,7 +385,7 @@ void show_lexerr(char *msg){
     printf("Error type A at Line %d: %s %s.\n", yylineno, msg ,yytext);
 }
 
-void add_node(const char* name, enum DATATYPE datatype, const char* val) {
-    yylval.node = token_node(name, datatype, val);
-    //print_tree(yylval.node,0);
+void add_node(const char* name, enum syntax_type datatype, const char* val) {
+    yylval.treeNode = node_init(name, datatype, val);
+    //tree_display(yylval.treeNode,0);
 }

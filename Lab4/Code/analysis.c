@@ -153,12 +153,12 @@ void dump_type(Type type, int depth) {
     }
 }
 
-void dump_node(Node node) {
+void dump_node(TreeNode node) {
     if (semantic_debug == 0) return;
-    if (node->tokenFlag == 0)
-        printf("Node \e[1;31m%s\e[0m child_num %d\n", node->name, node->child_num);
+    if (node->terminal == 0)
+        printf("TreeNode \e[1;31m%s\e[0m children_num %d\n", node->name, node->children_num);
     else
-        print_tree(node, 0);
+        tree_display(node, 0);
 }
 
 void dump_semantic_error(int err_type, int err_line, char* err_msg, char* err_elm) {
@@ -170,58 +170,58 @@ void dump_semantic_error(int err_type, int err_line, char* err_msg, char* err_el
     printf(".\n");
 }
 
-void Program(Node root) {
+void Program(TreeNode root) {
     init_hashtable();
     if (root == NULL) return;
-    // print_tree(root, 0);
+    // tree_display(root, 0);
     // Program -> ExtDefList
     dump_node(root);
-    assert(root->child_num == 1);
+    assert(root->children_num == 1);
     add_READ_WRITE_func();
     ExtDefList(get_child(root, 0));
 }
-void ExtDefList(Node root) {
+void ExtDefList(TreeNode root) {
     if (root == NULL) return;
     // ExtDefList -> ExtDef ExtDefList
     dump_node(root);
-    assert(root->child_num == 2);
+    assert(root->children_num == 2);
     ExtDef(get_child(root, 0));
     ExtDefList(get_child(root, 1));
 }
-void ExtDef(Node root) {
+void ExtDef(TreeNode root) {
     if (root == NULL) return;
     dump_node(root);
-    assert(root->child_num == 2 || root->child_num == 3);
+    assert(root->children_num == 2 || root->children_num == 3);
     Type type = Specifier(get_child(root, 0));
-    if (root->child_num == 3) {
+    if (root->children_num == 3) {
         if (strcmp(get_child(root, 1)->name, "ExtDecList") == 0) {  // ExtDef -> Specifier ExtDecList SEMI
             ExtDecList(get_child(root, 1), type);
         } else if (strcmp(get_child(root, 2)->name, "CompSt") == 0) {  // ExtDef -> Specifier FunDec CompSt
             FunDec(get_child(root, 1), type);
             CompSt(get_child(root, 2), type);
         }
-    } else if (root->child_num == 2) {
+    } else if (root->children_num == 2) {
         if (strcmp(get_child(root, 1)->name, "SEMI") == 0) {  // ExtDef -> Specifier SEMI
         }
     }
 }
-void ExtDecList(Node root, Type type) {
+void ExtDecList(TreeNode root, Type type) {
     if (root == NULL) return;
     dump_node(root);
-    assert(root->child_num == 1 || root->child_num == 3);
-    if (root->child_num == 1) {  // ExtDecList -> VarDec
+    assert(root->children_num == 1 || root->children_num == 3);
+    if (root->children_num == 1) {  // ExtDecList -> VarDec
         VarDec(get_child(root, 0), type, NULL);
-    } else if (root->child_num == 3) {  // ExtDecList -> VarDec COMMA ExtDecList
+    } else if (root->children_num == 3) {  // ExtDecList -> VarDec COMMA ExtDecList
         VarDec(get_child(root, 0), type, NULL);
         ExtDecList(get_child(root, 2), type);
     }
 }
 
-Type Specifier(Node root) {
+Type Specifier(TreeNode root) {
     if (root == NULL) return NULL;
     Type type = NULL;
     dump_node(root);
-    assert(root->child_num == 1);
+    assert(root->children_num == 1);
     if (strcmp(get_child(root, 0)->name, "TYPE") == 0) {  // Specifier -> TYPE
         type = (Type)malloc(sizeof(struct Type_));
         type->kind = BASIC;
@@ -239,13 +239,13 @@ Type Specifier(Node root) {
     }
     return type;
 }
-Type StructSpecifier(Node root) {
+Type StructSpecifier(TreeNode root) {
     if (root == NULL) return NULL;
     Type type = NULL;
     FieldList field = NULL;
     dump_node(root);
-    assert(root->child_num == 2 || root->child_num == 5);
-    if (root->child_num == 5) {  // StructSpecifier -> STRUCT OptTag LC DefList RC
+    assert(root->children_num == 2 || root->children_num == 5);
+    if (root->children_num == 5) {  // StructSpecifier -> STRUCT OptTag LC DefList RC
         char* opt_tag = OptTag(get_child(root, 1));
         if (opt_tag != NULL) {
             if (query(opt_tag) != NULL) {
@@ -266,7 +266,7 @@ Type StructSpecifier(Node root) {
         DefList(get_child(root, 3), field);
         field->type->struct_def_done = true;
         dump_field(field, 0);
-    } else if (root->child_num == 2) {  // StructSpecifier -> STRUCT TAG
+    } else if (root->children_num == 2) {  // StructSpecifier -> STRUCT TAG
         char* tag = Tag(get_child(root, 1));
         field = query(tag);
         if (field == NULL || field->type->struct_def_done == false) {
@@ -280,27 +280,27 @@ Type StructSpecifier(Node root) {
     type->u.structure = field;
     return type;
 }
-char* OptTag(Node root) {
+char* OptTag(TreeNode root) {
     if (root == NULL) return NULL;
     // OptTag -> ID
     dump_node(root);
-    assert(root->child_num == 1);
+    assert(root->children_num == 1);
     return get_child(root, 0)->val;
 }
-char* Tag(Node root) {
+char* Tag(TreeNode root) {
     if (root == NULL) return NULL;
     // Tag -> ID
     dump_node(root);
-    assert(root->child_num == 1);
+    assert(root->children_num == 1);
     return get_child(root, 0)->val;
 }
 
-FieldList VarDec(Node root, Type type, FieldList field) {
+FieldList VarDec(TreeNode root, Type type, FieldList field) {
     if (root == NULL) return NULL;
     FieldList var_field = NULL;
     dump_node(root);
-    assert(root->child_num == 1 || root->child_num == 4);
-    if (root->child_num == 1) {  // VarDec -> ID
+    assert(root->children_num == 1 || root->children_num == 4);
+    if (root->children_num == 1) {  // VarDec -> ID
         char* ID = get_child(root, 0)->val;
         var_field = (FieldList)malloc(sizeof(struct FieldList_));
         var_field->name = ID;
@@ -320,7 +320,7 @@ FieldList VarDec(Node root, Type type, FieldList field) {
             insert_field(var_field);
             if (field == NULL) dump_field(var_field, 0);
         }
-    } else if (root->child_num == 4) {  // VarDec -> VarDec LB INT RB
+    } else if (root->children_num == 4) {  // VarDec -> VarDec LB INT RB
         Type array_type = (Type)malloc(sizeof(struct Type_));
         array_type->kind = ARRAY;
         array_type->need_free = false;
@@ -330,10 +330,10 @@ FieldList VarDec(Node root, Type type, FieldList field) {
     }
     return var_field;
 }
-void FunDec(Node root, Type type) {
+void FunDec(TreeNode root, Type type) {
     if (root == NULL) return;
     dump_node(root);
-    assert(root->child_num == 3 || root->child_num == 4);
+    assert(root->children_num == 3 || root->children_num == 4);
     char* ID = get_child(root, 0)->val;
     FieldList field = NULL;
     FieldList prefield = query(ID);
@@ -353,63 +353,63 @@ void FunDec(Node root, Type type) {
         insert_field(field);
         dump_field(field, 0);
     }
-    if (root->child_num == 3) {         // FunDec -> ID LP RP
-    } else if (root->child_num == 4) {  // FunDec -> ID LP VarList RP
+    if (root->children_num == 3) {         // FunDec -> ID LP RP
+    } else if (root->children_num == 4) {  // FunDec -> ID LP VarList RP
         VarList(get_child(root, 2), field);
     }
 }
-void VarList(Node root, FieldList field) {
+void VarList(TreeNode root, FieldList field) {
     if (root == NULL) return;
     dump_node(root);
-    assert(root->child_num == 1 || root->child_num == 3);
-    if (root->child_num == 1) {  // VarList -> ParamDec
+    assert(root->children_num == 1 || root->children_num == 3);
+    if (root->children_num == 1) {  // VarList -> ParamDec
         add_func_parameter(get_child(root, 0), field);
-    } else if (root->child_num == 3) {  // VarList -> ParamDec COMMA VarList
+    } else if (root->children_num == 3) {  // VarList -> ParamDec COMMA VarList
         add_func_parameter(get_child(root, 0), field);
         VarList(get_child(root, 2), field);
     }
 }
-FieldList ParamDec(Node root) {
+FieldList ParamDec(TreeNode root) {
     if (root == NULL) return NULL;
     // ParamDec -> Specifier VarDec
     dump_node(root);
-    assert(root->child_num == 2);
+    assert(root->children_num == 2);
     Type type = Specifier(get_child(root, 0));
     return type != NULL ? VarDec(get_child(root, 1), type, NULL) : NULL;
 }
 
-void CompSt(Node root, Type type) {
+void CompSt(TreeNode root, Type type) {
     if (root == NULL) return;
     // CompSt -> LC DefList StmtList RC
     dump_node(root);
-    assert(root->child_num == 4);
+    assert(root->children_num == 4);
     DefList(get_child(root, 1), NULL);
     Stmtlist(get_child(root, 2), type);
 }
-void Stmtlist(Node root, Type type) {
+void Stmtlist(TreeNode root, Type type) {
     if (root == NULL) return;
     // Stmtlist -> Stmt Stmtlist
     dump_node(root);
-    assert(root->child_num == 2);
+    assert(root->children_num == 2);
     Stmt(get_child(root, 0), type);
     Stmtlist(get_child(root, 1), type);
 }
-void Stmt(Node root, Type type) {
+void Stmt(TreeNode root, Type type) {
     if (root == NULL) return;
     dump_node(root);
-    assert(root->child_num == 1 || root->child_num == 2 || root->child_num == 3 || root->child_num == 5 ||
-           root->child_num == 7);
-    if (root->child_num == 1) {  // Stmt -> CompSt
+    assert(root->children_num == 1 || root->children_num == 2 || root->children_num == 3 || root->children_num == 5 ||
+           root->children_num == 7);
+    if (root->children_num == 1) {  // Stmt -> CompSt
         CompSt(get_child(root, 0), type);
-    } else if (root->child_num == 2) {  // Stmt -> Exp SEMI
+    } else if (root->children_num == 2) {  // Stmt -> Exp SEMI
         Exp(get_child(root, 0));
-    } else if (root->child_num == 3) {  // Stmt -> RETURN Exp SEMI
+    } else if (root->children_num == 3) {  // Stmt -> RETURN Exp SEMI
         Type ret_type = Exp(get_child(root, 1));
         if (ret_type != NULL && type_matched(ret_type, type) == 0) {
             dump_semantic_error(8, root->line, "Type mismatched for return", NULL);
         }
         dump_type(ret_type, 0);
-    } else if (root->child_num == 5) {
+    } else if (root->children_num == 5) {
         /**
          * Stmt -> IF LP Exp RP Stmt
          *  Stmt -> WHILE LP Exp RP Stmt
@@ -420,7 +420,7 @@ void Stmt(Node root, Type type) {
             dump_semantic_error(7, root->line, "Non-int type cannot used as a condition", NULL);
         }
         Stmt(get_child(root, 4), type);
-    } else if (root->child_num == 7) {  // Stmt -> IF LP Exp RP Stmt ELSE Stmt
+    } else if (root->children_num == 7) {  // Stmt -> IF LP Exp RP Stmt ELSE Stmt
         Type cond_type = Exp(get_child(root, 2));
         if (cond_type != NULL && (cond_type->kind != BASIC || cond_type->u.basic != NUM_INT)) {
             // 非INT型作为条件语句
@@ -431,44 +431,44 @@ void Stmt(Node root, Type type) {
     }
 }
 
-void DefList(Node root, FieldList field) {
+void DefList(TreeNode root, FieldList field) {
     if (root == NULL) return;
     // DefList -> Def DefList
     dump_node(root);
-    assert(root->child_num == 2);
+    assert(root->children_num == 2);
     Def(get_child(root, 0), field);
     DefList(get_child(root, 1), field);
 }
-void Def(Node root, FieldList field) {
+void Def(TreeNode root, FieldList field) {
     if (root == NULL) return;
     // Def -> Specifier DecList SEMI
     dump_node(root);
-    assert(root->child_num == 3);
+    assert(root->children_num == 3);
     Type type = Specifier(get_child(root, 0));
     if (type != NULL) DecList(get_child(root, 1), type, field);
 }
-void DecList(Node root, Type type, FieldList field) {
+void DecList(TreeNode root, Type type, FieldList field) {
     if (root == NULL) return;
     dump_node(root);
-    assert(root->child_num == 1 || root->child_num == 3);
-    if (root->child_num == 1) {  // DecList -> Dec
+    assert(root->children_num == 1 || root->children_num == 3);
+    if (root->children_num == 1) {  // DecList -> Dec
         Dec(get_child(root, 0), type, field);
-    } else if (root->child_num == 3) {  // DecList -> Dec COMMA DecList
+    } else if (root->children_num == 3) {  // DecList -> Dec COMMA DecList
         Dec(get_child(root, 0), type, field);
         DecList(get_child(root, 2), type, field);
     }
 }
-void Dec(Node root, Type type, FieldList field) {
+void Dec(TreeNode root, Type type, FieldList field) {
     if (root == NULL) return;
     dump_node(root);
-    assert(root->child_num == 1 || root->child_num == 3);
-    if (root->child_num == 1) {  // Dec -> VarDec
+    assert(root->children_num == 1 || root->children_num == 3);
+    if (root->children_num == 1) {  // Dec -> VarDec
         if (field != NULL && field->type->kind == STRUCTTAG) {
             add_struct_member(get_child(root, 0), type, field);
         } else {
             VarDec(get_child(root, 0), type, field);
         }
-    } else if (root->child_num == 3) {  // VarDec ASSIGNOP Exp
+    } else if (root->children_num == 3) {  // VarDec ASSIGNOP Exp
         if (field != NULL && field->type->kind == STRUCTTAG) {
             add_struct_member(get_child(root, 0), type, field);
             dump_semantic_error(15, root->line, "Initialized struct field in definition", NULL);
@@ -485,13 +485,13 @@ void Dec(Node root, Type type, FieldList field) {
     }
 }
 
-Type Exp(Node root) {
+Type Exp(TreeNode root) {
     if (root == NULL) return NULL;
     Type type = NULL;
     FieldList result = NULL;
     dump_node(root);
-    assert(root->child_num == 1 || root->child_num == 2 || root->child_num == 3 || root->child_num == 4);
-    if (root->child_num == 1) {
+    assert(root->children_num == 1 || root->children_num == 2 || root->children_num == 3 || root->children_num == 4);
+    if (root->children_num == 1) {
         if (strcmp(get_child(root, 0)->name, "ID") == 0) {  // Exp -> ID
             result = query(get_child(root, 0)->val);
             if (result == NULL || result->type->kind == STRUCTTAG || result->type->kind == FUNCTION) {
@@ -512,7 +512,7 @@ Type Exp(Node root) {
                 assert(0);
             }
         }
-    } else if (root->child_num == 2) {
+    } else if (root->children_num == 2) {
         /**
          * Exp -> NOT Exp
          * Exp -> MINUS Exp
@@ -530,7 +530,7 @@ Type Exp(Node root) {
         } else if (strcmp(get_child(root, 0)->name, "MINUS") == 0) {
             type = Exp(get_child(root, 1));
         }
-    } else if (root->child_num == 3) {
+    } else if (root->children_num == 3) {
         if (strcmp(get_child(root, 0)->name, "LP") == 0) {  // Exp -> LP Exp RP
             type = Exp(get_child(root, 1));
         } else if (strcmp(get_child(root, 0)->name, "ID") == 0) {  // Exp -> ID LP RP
@@ -560,15 +560,15 @@ Type Exp(Node root) {
                 }
             }
         } else if (strcmp(get_child(root, 1)->name, "ASSIGNOP") == 0) {  // Exp ASSIGNOP Exp
-            Node node_left = get_child(root, 0);
+            TreeNode node_left = get_child(root, 0);
             type = Exp(node_left);
             Type type_right = Exp(get_child(root, 2));
             dump_type(type, 0);
             dump_type(type_right, 0);
             if (type == NULL) {
-            } else if (!((node_left->child_num == 1 && strcmp(get_child(node_left, 0)->name, "ID") == 0) ||
-                         (node_left->child_num == 3 && strcmp(get_child(node_left, 1)->name, "DOT") == 0) ||
-                         (node_left->child_num == 4 && strcmp(get_child(node_left, 0)->name, "Exp") == 0))) {
+            } else if (!((node_left->children_num == 1 && strcmp(get_child(node_left, 0)->name, "ID") == 0) ||
+                         (node_left->children_num == 3 && strcmp(get_child(node_left, 1)->name, "DOT") == 0) ||
+                         (node_left->children_num == 4 && strcmp(get_child(node_left, 0)->name, "Exp") == 0))) {
                 dump_semantic_error(6, root->line, "The left-hand side of an assignment must be a variable", NULL);
             }
             if (type_matched(type, type_right) == 0) {
@@ -607,7 +607,7 @@ Type Exp(Node root) {
                 type->need_free = true;
             }
         }
-    } else if (root->child_num == 4) {
+    } else if (root->children_num == 4) {
         if (strcmp(get_child(root, 0)->name, "ID") == 0) {  // Exp -> ID LP Args RP
             result = query(get_child(root, 0)->val);
             if (result == NULL) {
@@ -639,10 +639,10 @@ Type Exp(Node root) {
     }
     return type;
 }
-FieldList Args(Node root) {
+FieldList Args(TreeNode root) {
     if (root == NULL) return NULL;
     dump_node(root);
-    assert(root->child_num == 1 || root->child_num == 3);
+    assert(root->children_num == 1 || root->children_num == 3);
     Type args_type = Exp(get_child(root, 0));
     if (args_type == NULL) return NULL;
     FieldList args = (FieldList)malloc(sizeof(struct FieldList_));
@@ -650,8 +650,8 @@ FieldList Args(Node root) {
     args->type = args_type;
     args->tail = NULL;
     args->arg = false;
-    if (root->child_num == 1) {         // Args -> Exp
-    } else if (root->child_num == 3) {  // Args -> Exp COMMA Args
+    if (root->children_num == 1) {         // Args -> Exp
+    } else if (root->children_num == 3) {  // Args -> Exp COMMA Args
         args->tail = Args(get_child(root, 2));
     }
     return args;
@@ -712,7 +712,7 @@ bool args_matched(FieldList act_args, FieldList form_args) {
     return true;
 }
 
-void add_struct_member(Node member, Type mem_type, FieldList struct_field) {
+void add_struct_member(TreeNode member, Type mem_type, FieldList struct_field) {
     assert(struct_field != NULL);
     FieldList mem_field = VarDec(member, mem_type, struct_field);
     FieldList temp_field = struct_field->type->u.member;
@@ -726,7 +726,7 @@ void add_struct_member(Node member, Type mem_type, FieldList struct_field) {
     }
 }
 
-void add_func_parameter(Node param, FieldList func_field) {
+void add_func_parameter(TreeNode param, FieldList func_field) {
     FieldList arg_field = ParamDec(param);
     if (func_field == NULL || arg_field == NULL) return;
     func_field->type->u.function.argc++;

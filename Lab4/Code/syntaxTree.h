@@ -5,25 +5,30 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-enum DATATYPE { TYPE_INT, TYPE_OCT, TYPE_HEX, TYPE_FLOAT, TYPE_ID, TYPE_TYPE, OTHER };
-typedef struct treenode_* Node;
-#define MAX_CHILD_NODES 10
-struct treenode_ {
-    int line;                // 非终结符结点对应的行号
-    char name[32];           // 每个结点的名字类型
-    char val[64];            
-    int tokenFlag;           // 是否是终结符
-    enum DATATYPE datatype;  // 如果是int float ID TYPE要保存其对应的值
-    union {                  // 存储对应类型的值
+#include <stdbool.h>
+
+typedef struct TreeNode_* TreeNode;
+
+#define MAX_CHILDREN 8
+enum syntax_type { TYPE_INT, TYPE_OCT, TYPE_HEX, TYPE_FLOAT, TYPE_ID, TYPE_TYPE, OTHER };
+
+struct TreeNode_ {
+    char name[32];  // name, e.g. "DefList"
+    char val[64];       // value in char* format         
+    bool terminal;           // if is terminal node
+    union {
         unsigned val_int;
         float val_float;
-        char var_ID[64];
+        char* var_str;
     } data;
-    int child_num;
-    Node childs[MAX_CHILD_NODES];
+    int children_num;
+    TreeNode children[MAX_CHILDREN];
+    int line;
+    enum syntax_type datatype;
 };
-void print_tree(Node mynode, int depth);                                     // 打印AST，depth表示深度
-Node token_node(const char* name, enum DATATYPE datatype, const char* val);  // terminator node
-Node nonterminal_node(const char* name, int line, int node_num, ...);  // nonterminal_node
-Node get_child(Node mynode, int child_idx);                            // 按照下标访问子节点
+
+void tree_display(TreeNode newnode, int depth);                                    
+TreeNode node_init(const char* name, enum syntax_type datatype, const char* val);  // terminator node
+TreeNode node_insert(const char* name, int line, int node_num, ...);  // node_insert
+TreeNode get_child(TreeNode mynode, int child_idx);                   
 #endif

@@ -322,48 +322,48 @@ Operand new_label() { return gen_operand(OP_LABEL, -1, label_number++, NULL); }
 
 extern InterCodeList global_ir_list_head;  // 循环双向链表头
 
-void translate_Program(Node root) {
+void translate_Program(TreeNode root) {
     global_ir_list_head = init_ir_list();
     assert(global_ir_list_head != NULL);
     if (root == NULL) return;
     dump_translator_node(root, "Program");
     // Program -> ExtDefList
-    assert(root->child_num == 1);
+    assert(root->children_num == 1);
     translate_ExtDefList(get_child(root, 0));
 }
 
-void translate_ExtDefList(Node root) {
+void translate_ExtDefList(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "ExtDefList");
     // ExtDefList -> ExtDef ExtDefList
-    assert(root->child_num == 2);
+    assert(root->children_num == 2);
     translate_ExtDef(get_child(root, 0));
     translate_ExtDefList(get_child(root, 1));
 }
 
-void translate_ExtDef(Node root) {
+void translate_ExtDef(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "ExtDef");
-    assert(root->child_num == 2 || root->child_num == 3);
-    if (root->child_num == 3) {
+    assert(root->children_num == 2 || root->children_num == 3);
+    if (root->children_num == 3) {
         if (strcmp(get_child(root, 1)->name, "ExtDecList") == 0) {  // ExtDef -> Specifier ExtDecList SEMI
             // 假设4 没有全局变量
         } else if (strcmp(get_child(root, 2)->name, "CompSt") == 0) {  // ExtDef -> Specifier FunDec CompSt
             translate_FunDec(get_child(root, 1));
             translate_CompSt(get_child(root, 2));
         }
-    } else if (root->child_num == 2) {
+    } else if (root->children_num == 2) {
         if (strcmp(get_child(root, 1)->name, "SEMI") == 0) {  // ExtDef -> Specifier SEMI
         }
     }
 }
 
-Operand translate_VarDec(Node root) {
+Operand translate_VarDec(TreeNode root) {
     if (root == NULL) return NULL;
     dump_translator_node(root, "VarDec");
-    assert(root->child_num == 1 || root->child_num == 4);
+    assert(root->children_num == 1 || root->children_num == 4);
     Operand name_op = NULL;
-    if (root->child_num == 1) {  // VarDec -> ID
+    if (root->children_num == 1) {  // VarDec -> ID
         char* var_name = get_child(root, 0)->val;
         FieldList res = query(var_name);
         assert(res != NULL);
@@ -381,24 +381,24 @@ Operand translate_VarDec(Node root) {
         } else {  // 不应出现函数或者结构体定义类型
             assert(0);
         }
-    } else if (root->child_num == 4) {  // VarDec -> VarDec LB INT RB
+    } else if (root->children_num == 4) {  // VarDec -> VarDec LB INT RB
         return translate_VarDec(get_child(root, 0));
     }
     return name_op;
 }
 
-void translate_FunDec(Node root) {
+void translate_FunDec(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "FunDec");
-    assert(root->child_num == 3 || root->child_num == 4);
+    assert(root->children_num == 3 || root->children_num == 4);
     char* func_name = get_child(root, 0)->val;
     FieldList func_field = query(func_name);
     assert(func_field != NULL);
     // FUNCTION func.name
     Operand func_op = gen_operand(OP_FUNCTION, -1, -1, func_name);
     gen_ir(global_ir_list_head, IR_FUNC, func_op, NULL, NULL, -1, NULL);
-    if (root->child_num == 3) {         // FunDec -> ID LP RP
-    } else if (root->child_num == 4) {  // FunDec -> ID LP VarList RP
+    if (root->children_num == 3) {         // FunDec -> ID LP RP
+    } else if (root->children_num == 4) {  // FunDec -> ID LP VarList RP
         FieldList arg_field = func_field->type->u.function.argv;
         while (arg_field) {
             // PARAM arg.name
@@ -422,40 +422,40 @@ void translate_FunDec(Node root) {
     }
 }
 
-void translate_CompSt(Node root) {
+void translate_CompSt(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "CompSt");
     // CompSt -> LC DefList StmtList RC
-    assert(root->child_num == 4);
+    assert(root->children_num == 4);
     translate_DefList(get_child(root, 1));
     translate_StmtList(get_child(root, 2));
 }
 
-void translate_StmtList(Node root) {
+void translate_StmtList(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "StmtList");
     // Stmtlist -> Stmt Stmtlist
-    assert(root->child_num == 2);
+    assert(root->children_num == 2);
     translate_Stmt(get_child(root, 0));
     translate_StmtList(get_child(root, 1));
 }
 
-void translate_Stmt(Node root) {
+void translate_Stmt(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "Stmt");
-    assert(root->child_num == 1 || root->child_num == 2 || root->child_num == 3 || root->child_num == 5 ||
-           root->child_num == 7);
-    if (root->child_num == 1) {  // Stmt -> CompSt
+    assert(root->children_num == 1 || root->children_num == 2 || root->children_num == 3 || root->children_num == 5 ||
+           root->children_num == 7);
+    if (root->children_num == 1) {  // Stmt -> CompSt
         translate_CompSt(get_child(root, 0));
-    } else if (root->child_num == 2) {  // Stmt -> Exp SEMI
+    } else if (root->children_num == 2) {  // Stmt -> Exp SEMI
         translate_Exp(get_child(root, 0), new_temp());
-    } else if (root->child_num == 3) {  // Stmt -> RETURN Exp SEMI
+    } else if (root->children_num == 3) {  // Stmt -> RETURN Exp SEMI
         Operand t1 = new_temp();
         translate_Exp(get_child(root, 1), t1);
         t1 = load_value(t1);
         // RETURN t1
         gen_ir(global_ir_list_head, IR_RETURN, t1, NULL, NULL, -1, NULL);
-    } else if (root->child_num == 5) {
+    } else if (root->children_num == 5) {
         if (strcmp(get_child(root, 0)->name, "IF") == 0) {  // Stmt -> IF LP Exp RP Stmt
             Operand label1 = new_label();
             Operand label2 = new_label();
@@ -480,11 +480,11 @@ void translate_Stmt(Node root) {
             // LABEL label3
             gen_ir(global_ir_list_head, IR_LABEL, label3, NULL, NULL, -1, NULL);
         }
-    } else if (root->child_num == 7) {  // Stmt -> IF LP Exp RP Stmt ELSE Stmt
+    } else if (root->children_num == 7) {  // Stmt -> IF LP Exp RP Stmt ELSE Stmt
         Operand label1 = new_label();
         Operand label2 = new_label();
         Operand label3 = new_label();
-        // print_tree(get_child(root, 2), 0);
+        // tree_display(get_child(root, 2), 0);
         translate_Cond(get_child(root, 2), label1, label2);
         // LABEL label1
         gen_ir(global_ir_list_head, IR_LABEL, label1, NULL, NULL, -1, NULL);
@@ -499,41 +499,41 @@ void translate_Stmt(Node root) {
     }
 }
 
-void translate_DefList(Node root) {
+void translate_DefList(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "DefList");
     // DefList -> Def DefList
-    assert(root->child_num == 2);
+    assert(root->children_num == 2);
     translate_Def(get_child(root, 0));
     translate_DefList(get_child(root, 1));
 }
 
-void translate_Def(Node root) {
+void translate_Def(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "Def");
     // Def -> Specifier DecList SEMI
-    assert(root->child_num == 3);
+    assert(root->children_num == 3);
     translate_DecList(get_child(root, 1));
 }
 
-void translate_DecList(Node root) {
+void translate_DecList(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "DecList");
-    assert(root->child_num == 1 || root->child_num == 3);
+    assert(root->children_num == 1 || root->children_num == 3);
     translate_Dec(get_child(root, 0));
-    if (root->child_num == 1) {         // DecList -> Dec
-    } else if (root->child_num == 3) {  // DecList -> Dec COMMA DecList
+    if (root->children_num == 1) {         // DecList -> Dec
+    } else if (root->children_num == 3) {  // DecList -> Dec COMMA DecList
         translate_DecList(get_child(root, 2));
     }
 }
 
-void translate_Dec(Node root) {
+void translate_Dec(TreeNode root) {
     if (root == NULL) return;
     dump_translator_node(root, "Dec");
-    assert(root->child_num == 1 || root->child_num == 3);
+    assert(root->children_num == 1 || root->children_num == 3);
     Operand name_op = translate_VarDec(get_child(root, 0));
-    if (root->child_num == 1) {         // Dec -> VarDec
-    } else if (root->child_num == 3) {  // VarDec ASSIGNOP Exp
+    if (root->children_num == 1) {         // Dec -> VarDec
+    } else if (root->children_num == 3) {  // VarDec ASSIGNOP Exp
         Operand t1 = new_temp();
         translate_Exp(get_child(root, 2), t1);
         if (name_op->kind == OP_ARRAY) {  // 给数组初始化
@@ -546,12 +546,12 @@ void translate_Dec(Node root) {
     }
 }
 
-void translate_Exp(Node root, Operand place) {
+void translate_Exp(TreeNode root, Operand place) {
     if (root == NULL) return;
     dump_translator_node(root, "Exp");
-    assert(root->child_num == 1 || root->child_num == 2 || root->child_num == 3 || root->child_num == 4);
-    if ((root->child_num == 2 && strcmp(get_child(root, 0)->name, "NOT") == 0) ||
-        (root->child_num == 3 &&
+    assert(root->children_num == 1 || root->children_num == 2 || root->children_num == 3 || root->children_num == 4);
+    if ((root->children_num == 2 && strcmp(get_child(root, 0)->name, "NOT") == 0) ||
+        (root->children_num == 3 &&
          (strcmp(get_child(root, 1)->name, "AND") == 0 || strcmp(get_child(root, 1)->name, "OR") == 0 ||
           strcmp(get_child(root, 1)->name, "RELOP") == 0))) {
         /**
@@ -571,7 +571,7 @@ void translate_Exp(Node root, Operand place) {
         gen_ir(global_ir_list_head, IR_ASSIGN, place, gen_operand(OP_CONSTANT, 1, -1, NULL), NULL, -1, NULL);
         // LABEL label2
         gen_ir(global_ir_list_head, IR_LABEL, label2, NULL, NULL, -1, NULL);
-    } else if (root->child_num == 1) {
+    } else if (root->children_num == 1) {
         // 优化： 不再生成 t := v,而是将t改成v
         if (strcmp(get_child(root, 0)->name, "ID") == 0) {  // Exp -> ID
             FieldList result = query(get_child(root, 0)->val);
@@ -605,7 +605,7 @@ void translate_Exp(Node root, Operand place) {
         } else {  // 假设1 不存在浮点型常量
             assert(0);
         }
-    } else if (root->child_num == 2) {
+    } else if (root->children_num == 2) {
         if (strcmp(get_child(root, 0)->name, "MINUS") == 0) {  // Exp -> MINUS Exp
             Operand t1 = new_temp();
             translate_Exp(get_child(root, 1), t1);
@@ -617,7 +617,7 @@ void translate_Exp(Node root, Operand place) {
                 gen_ir(global_ir_list_head, IR_SUB, place, gen_operand(OP_CONSTANT, 0, -1, NULL), t1, -1, NULL);
             }
         }
-    } else if (root->child_num == 3) {
+    } else if (root->children_num == 3) {
         if (strcmp(get_child(root, 0)->name, "LP") == 0) {  // Exp -> LP Exp RP
             translate_Exp(get_child(root, 1), place);
         } else if (strcmp(get_child(root, 0)->name, "ID") == 0) {  // Exp -> ID LP RP
@@ -704,7 +704,7 @@ void translate_Exp(Node root, Operand place) {
                 gen_ir(global_ir_list_head, ir_kind, place, t1, t2, -1, NULL);
             }
         }
-    } else if (root->child_num == 4) {
+    } else if (root->children_num == 4) {
         if (strcmp(get_child(root, 0)->name, "ID") == 0) {  // Exp -> ID LP Args RP
             FieldList function = query(get_child(root, 0)->val);
             assert(function != NULL);
@@ -768,13 +768,13 @@ void translate_Exp(Node root, Operand place) {
     }
 }
 
-void translate_Args(Node root, bool write_func) {
+void translate_Args(TreeNode root, bool write_func) {
     if (root == NULL) return;
     dump_translator_node(root, "Args");
-    assert(root->child_num == 1 || root->child_num == 3);
+    assert(root->children_num == 1 || root->children_num == 3);
 
-    if (root->child_num == 1) {         // Args -> Exp
-    } else if (root->child_num == 3) {  // Args -> Exp COMMA Args
+    if (root->children_num == 1) {         // Args -> Exp
+    } else if (root->children_num == 3) {  // Args -> Exp COMMA Args
         assert(!write_func);            // WRITE 只有一个参数
         translate_Args(get_child(root, 2), write_func);
     }
@@ -801,24 +801,24 @@ void translate_Args(Node root, bool write_func) {
     }
 }
 
-void translate_Cond(Node root, Operand label_true, Operand label_false) {
+void translate_Cond(TreeNode root, Operand label_true, Operand label_false) {
     if (root == NULL) return;
-    assert(root->child_num == 1 || root->child_num == 2 || root->child_num == 3 || root->child_num == 4);
+    assert(root->children_num == 1 || root->children_num == 2 || root->children_num == 3 || root->children_num == 4);
     if (translator_debug) printf("Translate \e[1;31mCond\e[0m\n");
 
-    if (root->child_num == 2 && strcmp(get_child(root, 0)->name, "NOT") == 0) {  // NOT Exp
+    if (root->children_num == 2 && strcmp(get_child(root, 0)->name, "NOT") == 0) {  // NOT Exp
         translate_Cond(get_child(root, 1), label_false, label_true);
-    } else if (root->child_num == 3 && strcmp(get_child(root, 1)->name, "AND") == 0) {  // Exp AND Exp
+    } else if (root->children_num == 3 && strcmp(get_child(root, 1)->name, "AND") == 0) {  // Exp AND Exp
         Operand label1 = new_label();
         translate_Cond(get_child(root, 0), label1, label_false);
         gen_ir(global_ir_list_head, IR_LABEL, label1, NULL, NULL, -1, NULL);
         translate_Cond(get_child(root, 2), label_true, label_false);
-    } else if (root->child_num == 3 && strcmp(get_child(root, 1)->name, "OR") == 0) {  // Exp OR Exp
+    } else if (root->children_num == 3 && strcmp(get_child(root, 1)->name, "OR") == 0) {  // Exp OR Exp
         Operand label1 = new_label();
         translate_Cond(get_child(root, 0), label_true, label1);
         gen_ir(global_ir_list_head, IR_LABEL, label1, NULL, NULL, -1, NULL);
         translate_Cond(get_child(root, 2), label_true, label_false);
-    } else if (root->child_num == 3 && strcmp(get_child(root, 1)->name, "RELOP") == 0) {  // Exp RELOP Exp
+    } else if (root->children_num == 3 && strcmp(get_child(root, 1)->name, "RELOP") == 0) {  // Exp RELOP Exp
         Operand t1 = new_temp();
         translate_Exp(get_child(root, 0), t1);
         t1 = load_value(t1);
@@ -908,12 +908,12 @@ int get_size(Type type) {
     return 0;
 }
 
-void dump_translator_node(Node node, char* translator_name) {
+void dump_translator_node(TreeNode node, char* translator_name) {
     if (translator_debug == 0) return;
     printf("Translate \e[1;31m%-15s\e[0m", translator_name);
-    if (node->tokenFlag == 0) {
-        printf("Node \e[1;31m%-15s\e[0m\tchild_num %d\n", node->name, node->child_num);
+    if (node->terminal == 0) {
+        printf("TreeNode \e[1;31m%-15s\e[0m\tchild_num %d\n", node->name, node->children_num);
         assert(strcmp(node->name, translator_name) == 0);
     } else
-        print_tree(node, 0);
+        tree_display(node, 0);
 }
