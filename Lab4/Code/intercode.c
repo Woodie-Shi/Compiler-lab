@@ -399,7 +399,7 @@ void translate_FunDec(TreeNode root) {
     gen_ir(global_ir_list_head, IR_FUNC, func_op, NULL, NULL, -1, NULL);
     if (root->children_num == 3) {         // FunDec -> ID LP RP
     } else if (root->children_num == 4) {  // FunDec -> ID LP VarList RP
-        FieldList arg_field = func_field->type->u.function.argv;
+        FieldList arg_field = func_field->type->u.function.params;
         while (arg_field) {
             // PARAM arg.name
             Operand arg_op;
@@ -895,7 +895,7 @@ int get_size(Type type) {
     } else if (type->kind == STRUCTURE) {
         //dump_structure_err();
         int size = 0;
-        FieldList iter = type->u.structure->type->u.member;
+        FieldList iter = type->u.structfield->type->u.member;
         while (iter) {
             size += get_size(iter->type);
             iter = iter->tail;

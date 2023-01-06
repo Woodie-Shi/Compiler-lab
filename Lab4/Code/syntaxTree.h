@@ -23,12 +23,12 @@ struct TreeNode_ {
     } data;
     int children_num;
     TreeNode children[MAX_CHILDREN];
-    int line;
+    int lineno;
     enum syntax_type datatype;
 };
 
 void tree_display(TreeNode newnode, int depth);                                    
 TreeNode node_init(const char* name, enum syntax_type datatype, const char* val);  // terminator node
-TreeNode node_insert(const char* name, int line, int node_num, ...);  // node_insert
+TreeNode node_insert(const char* name, int lineno, int node_num, ...);  // node_insert
 TreeNode get_child(TreeNode mynode, int child_idx);                   
 #endif

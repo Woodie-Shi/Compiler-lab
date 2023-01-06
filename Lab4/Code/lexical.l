@@ -368,7 +368,7 @@ SPACE [  \r\t]+
 
 . {
     /*Error++;
-    printf("Error type A at line %d: Mysterious character \"%s\".\n",yylineno,yytext);*/
+    printf("Error type A at lineno %d: Mysterious character \"%s\".\n",yylineno,yytext);*/
     show_lexerr("Mysterious characters");
 }
 

@@ -21,7 +21,7 @@ void tree_display(TreeNode newnode, int depth) {
                 break;
         }
     } else {
-        printf(" (%d)", newnode->line);
+        printf(" (%d)", newnode->lineno);
     }
     printf("\n");
     if (newnode->terminal == 0) {
@@ -62,12 +62,12 @@ TreeNode node_init(const char* name, enum syntax_type datatype, const char* val)
     }
     return newnode;
 }
-TreeNode node_insert(const char* name, int line, int node_num, ...) {
+TreeNode node_insert(const char* name, int lineno, int node_num, ...) {
     TreeNode newnode = (TreeNode)malloc(sizeof(struct TreeNode_));
     for (int i = 0; i < MAX_CHILDREN; i++) {
         newnode->children[i] = NULL;
     }
-    newnode->line = line;
+    newnode->lineno = lineno;
     newnode->terminal = 0;
     newnode->children_num = node_num;
     sscanf(name, "%s", newnode->name);

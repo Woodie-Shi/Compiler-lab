@@ -13,9 +13,8 @@ int lexical_errs = 0;                // 出现的词法错误
 int syntax_errs = 0;                 // 出现的语法错误
 int semantic_errs = 0;               // 出现的语义错误
 
-int semantic_debug = 0;              // semantic debug mode
 int translator_debug = 0;            // translator debug mode
-int translator_struct = 0;           // 是否处理结构体
+
 extern YYSTYPE yylval;                      // 存储终结符的语义值
 TreeNode root;                           // AST语法树的根结点
 InterCodeList* label_array;          // 所有编号的数组
