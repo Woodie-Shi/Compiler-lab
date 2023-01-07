@@ -1,5 +1,5 @@
-#ifndef __OBJCODE_H__
-#define __OBJCODE_H__
+#ifndef _OBJCODE_H
+#define _OBJCODE_H
 #include "intercode.h"
 
 #define REGISTER_NUM 32

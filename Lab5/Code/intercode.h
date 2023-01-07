@@ -71,12 +71,22 @@ struct InterCode_ {
         struct { Operand x, y, z; char relop[64]; } if_goto;
         struct { Operand op; int size; } dec; 
     } u;
+
+    bool bb_start;       // 基本块的开始
+    unsigned int bb_no;  // 所处基本块的编号
 };
 
 struct InterCodeList_ {
     InterCode code;
     InterCodeList prev, next;
 };
+
+void delete_ir(InterCodeList ir);
+void show_ir(InterCode ir, FILE* ir_out);
+void show_ir_list(InterCodeList ir_list_head, FILE* ir_out);
+
+Operand gen_operand(int operand_kind, long long val, int number, char* name);
+InterCode gen_ir(InterCodeList ir_list_head, int ir_kind, Operand op1, Operand op2, Operand op3, int dec_size, char* relop);
 
 void translate_Program(TreeNode root);
 void translate_ExtDefList(TreeNode root);
@@ -93,7 +103,5 @@ void translate_Dec(TreeNode root);
 void translate_Exp(TreeNode root, Operand place);
 void translate_Args(TreeNode root, bool write_func);
 void translate_Cond(TreeNode root, Operand true_label, Operand false_label);
-
-// void show_ir_list(InterCodeList ir_list_head, FILE* ir_out);
 
 #endif
