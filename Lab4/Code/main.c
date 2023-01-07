@@ -50,7 +50,7 @@ int main(int argc, char** argv)
                 printf("%s\n", argv[2]);
                 return -1;
             }
-            gencode(IrList, code_out);
+            generate(IrList, code_out);
             fclose(code_out);
         }
         else{
