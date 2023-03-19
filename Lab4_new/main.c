@@ -5,7 +5,6 @@
 #include "analysis.h"
 #include "intercode.h"
 #include "objcode.h"
-#include "optimization.h"
 
 extern FILE* yyin;                          // This is the file pointer from which the lexer reads its input.
 FILE* ir_out;                  
@@ -18,7 +17,6 @@ extern YYSTYPE yylval;                      // 存储终结符的语义值
 TreeNode root;                           // AST语法树的根结点
 InterCodeList* label_array;          // 所有编号的数组
 InterCodeList IrList;   // IR循环双向链表头
-BasicBlockList global_bb_list_head;  // 基本块循环双向链表头
 
 extern void yyrestart(FILE *);
 extern int yyparse();
@@ -48,13 +46,11 @@ int main(int argc, char** argv)
         if (semantic_errs == 0) {
             translate_Program(root);
             show_ir_list(IrList, NULL);
-            optimize();
             if (!(code_out = fopen(argv[2], "w"))) {
                 printf("%s\n", argv[2]);
                 return -1;
             }
-            //generate(IrList, code_out);
-            gencode(code_out);
+            generate(IrList, code_out);
             fclose(code_out);
         }
         else{

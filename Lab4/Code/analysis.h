@@ -10,6 +10,7 @@ typedef struct Type_* Type;
 typedef struct FieldList_* FieldList;
 typedef struct HashNode_* HashNode;
 extern HashNode hashtable[HASHTABLE_SIZE + 1];
+extern int var_number;
 
 struct Type_ {
     enum { BASIC, ARRAY, STRUCTURE, STRUCTTAG, FUNCTION } kind;

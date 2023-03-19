@@ -869,6 +869,24 @@ void translate_Args(TreeNode root, bool write_func) {
     }
     Operand arg = op_temp();
     translate_Exp(get_child(root, 0), arg);
+    if (arg->kind == OP_STRUCTURE) {}
+    if (write_func) {  // WRITE arg
+        arg = load_value(arg);
+        gen_ir(IrList, IR_WRITE, arg, NULL, NULL, -1, NULL);
+    } 
+    else {
+        if (arg->kind == OP_ARRAY) {
+            arg = get_addr(arg, true);
+        } 
+        else if (arg->kind == OP_ADDRESS) {
+            if (arg->type == NULL) { 
+                arg = load_value(arg);
+            } 
+            else if (arg->type->kind == BASIC) {
+            } 
+        }
+        gen_ir(IrList, IR_ARG, arg, NULL, NULL, -1, NULL);
+    }
 }
 
 void translate_Cond(TreeNode root, Operand label_true, Operand label_false) {
